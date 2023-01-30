@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const UserList = ({ users }) => {
   return (
     <section>
@@ -5,7 +7,9 @@ const UserList = ({ users }) => {
 
       <ul>
         {users.map((user) => (
-          <li key={user._id}>{user.firstName}</li>
+          <li key={user._id}>
+            <Link href={`/users/${user._id}`}>{user.firstName}</Link>
+          </li>
         ))}
       </ul>
     </section>
