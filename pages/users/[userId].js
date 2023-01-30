@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ObjectId } from 'mongodb';
-import { getOneDocument, getAllDocuments } from '@/helpers/db-utils';
+import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
 import CreateAccountForm from '@/components/create-account-form';
 import AccountList from '@/components/account-list';
 
@@ -17,11 +17,14 @@ const UserPage = (props) => {
 };
 
 export const getStaticProps = async (context) => {
-  const query = { _id: ObjectId(context.params.userId) };
+  const userId = context.params.userId;
 
-  const user = await getOneDocument('users', query);
+  const usersQuery = { _id: ObjectId(userId) };
+  const accountsQuery = { userId: userId };
 
-  const accounts = await getAllDocuments('accounts');
+  const user = await getOneDocument('users', usersQuery);
+
+  const accounts = await getMultipleDocuments('accounts', accountsQuery);
 
   return {
     props: {
@@ -32,7 +35,7 @@ export const getStaticProps = async (context) => {
 };
 
 export const getStaticPaths = async () => {
-  const users = await getAllDocuments('users');
+  const users = await getMultipleDocuments('users');
 
   const paths = users.map((user) => {
     return {

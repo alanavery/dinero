@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getAllDocuments } from '@/helpers/db-utils';
+import { getMultipleDocuments } from '@/helpers/db-utils';
 import CreateUserForm from '@/components/create-user-form';
 import UserList from '@/components/user-list';
 
@@ -16,7 +16,7 @@ const HomePage = (props) => {
 };
 
 export const getStaticProps = async () => {
-  const users = await getAllDocuments('users');
+  const users = await getMultipleDocuments('users');
 
   return {
     props: {
