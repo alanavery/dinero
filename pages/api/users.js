@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
 const handler = async (req, res) => {
-  const client = new MongoClient(`mongodb+srv://${'test'}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
+  const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
 
   if (req.method === 'POST') {
     try {
