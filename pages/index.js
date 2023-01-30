@@ -8,7 +8,6 @@ const HomePage = (props) => {
 
   return (
     <main>
-      <h1>Home Page</h1>
       <UserList users={users} />
       <CreateUserForm setUsers={setUsers} />
     </main>
