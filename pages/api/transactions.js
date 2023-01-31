@@ -6,17 +6,20 @@ const handler = async (req, res) => {
   if (req.method === 'POST') {
     try {
       const database = client.db('dinero');
-      const collection = database.collection('accounts');
+      const collection = database.collection('transactions');
 
-      const newAccount = {
-        name: req.body.name,
-        balance: req.body.balance,
-        creditAccount: req.body.creditAccount,
-        creditLimit: req.body.creditLimit,
-        userId: req.body.userId,
+      const newTransaction = {
+        amount: req.body.amount,
+        payee: req.body.payee,
+        date: req.body.date,
+        cleared: req.body.cleared,
+        budget: req.body.budget,
+        split: req.body.split,
+        tag: req.body.tag,
+        accountId: req.body.accountId,
       };
 
-      const result = await collection.insertOne(newAccount);
+      const result = await collection.insertOne(newTransaction);
 
       const documents = await collection.find({ userId: req.body.userId }).toArray();
 

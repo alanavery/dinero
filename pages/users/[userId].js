@@ -3,15 +3,24 @@ import { ObjectId } from 'mongodb';
 import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
 import CreateAccountForm from '@/components/create-account-form';
 import AccountList from '@/components/account-list';
+import TransactionList from '@/components/transaction-list';
+import CreateTransactionForm from '@/components/create-transaction-form';
 
-const UserPage = (props) => {
-  const [accounts, setAccounts] = useState(props.accounts);
+const UserPage = ({ userData, accountData }) => {
+  const [accounts, setAccounts] = useState(accountData);
+  const [selectedAccount, setSelectedAccount] = useState(accountData[0] ? accountData[0] : undefined);
 
   return (
     <main>
-      <h1>{`${props.user.firstName}'s`} Page</h1>
-      <AccountList accounts={accounts} />
-      <CreateAccountForm userId={props.user._id} setAccounts={setAccounts} />
+      <h1>{`${userData.firstName}'s`} Page</h1>
+      <AccountList accounts={accounts} selectedAccount={selectedAccount} setSelectedAccount={setSelectedAccount} />
+      <CreateAccountForm userId={userData._id} accounts={accounts} setAccounts={setAccounts} setSelectedAccount={setSelectedAccount} />
+      {selectedAccount && (
+        <>
+          <TransactionList selectedAccount={selectedAccount} />
+          <CreateTransactionForm accountId={selectedAccount._id} />
+        </>
+      )}
     </main>
   );
 };
@@ -22,22 +31,22 @@ export const getStaticProps = async (context) => {
   const usersQuery = { _id: ObjectId(userId) };
   const accountsQuery = { userId: userId };
 
-  const user = await getOneDocument('users', usersQuery);
+  const userData = await getOneDocument('users', usersQuery);
 
-  const accounts = await getMultipleDocuments('accounts', accountsQuery);
+  const accountData = await getMultipleDocuments('accounts', accountsQuery);
 
   return {
     props: {
-      user,
-      accounts,
+      userData,
+      accountData,
     },
   };
 };
 
 export const getStaticPaths = async () => {
-  const users = await getMultipleDocuments('users');
+  const userData = await getMultipleDocuments('users');
 
-  const paths = users.map((user) => {
+  const paths = userData.map((user) => {
     return {
       params: {
         userId: user._id,

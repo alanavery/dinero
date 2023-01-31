@@ -1,29 +1,28 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const CreateUserForm = (props) => {
+const CreateUserForm = ({ setUsers }) => {
   const [firstName, setFirstName] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = {
       firstName,
     };
 
-    axios
+    await axios
       .post('/api/users', formData)
-      .then((response) => {
-        console.log(response);
-        props.setUsers(response.data.users);
-        setFirstName('');
+      .then(({ data: { userData } }) => {
+        setUsers(userData);
       })
       .catch((error) => {
         console.log(error);
         setMessage(error.response.data.message);
-        setFirstName('');
       });
+
+    setFirstName('');
   };
 
   return (

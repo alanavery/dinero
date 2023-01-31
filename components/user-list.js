@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
-const UserList = (props) => {
+const UserList = ({ users }) => {
   return (
     <section>
       <h2>Users</h2>
 
       <ul>
-        {props.users.map((user) => (
+        {users.map((user) => (
           <li key={user._id}>
             <Link href={`/users/${user._id}`}>{user.firstName}</Link>
           </li>

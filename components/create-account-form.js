@@ -1,21 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const CreateAccountForm = (props) => {
+const CreateAccountForm = ({ userId, accounts, setAccounts, setSelectedAccount }) => {
   const [name, setName] = useState('');
   const [balance, setBalance] = useState('');
   const [creditAccount, setCreditAccount] = useState(false);
   const [creditLimit, setCreditLimit] = useState('');
   const [message, setMessage] = useState('');
 
-  const clearForm = () => {
-    setName('');
-    setBalance('');
-    setCreditAccount(false);
-    setCreditLimit('');
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = {
@@ -23,21 +16,24 @@ const CreateAccountForm = (props) => {
       balance,
       creditAccount,
       creditLimit,
-      userId: props.userId,
+      userId: userId,
     };
 
-    axios
+    await axios
       .post('/api/accounts', formData)
-      .then((response) => {
-        console.log(response);
-        props.setAccounts(response.data.accounts);
-        clearForm();
+      .then(async ({ data: { result, accountData } }) => {
+        setAccounts(accountData);
+        setSelectedAccount(accountData.find((account) => account._id === result.insertedId));
       })
       .catch((error) => {
         console.log(error);
         setMessage(error.response.data.message);
-        clearForm();
       });
+
+    setName('');
+    setBalance('');
+    setCreditAccount(false);
+    setCreditLimit('');
   };
 
   return (

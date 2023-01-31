@@ -3,8 +3,8 @@ import { getMultipleDocuments } from '@/helpers/db-utils';
 import CreateUserForm from '@/components/create-user-form';
 import UserList from '@/components/user-list';
 
-const HomePage = (props) => {
-  const [users, setUsers] = useState(props.users);
+const HomePage = ({ userData }) => {
+  const [users, setUsers] = useState(userData);
 
   return (
     <main>
@@ -15,11 +15,11 @@ const HomePage = (props) => {
 };
 
 export const getStaticProps = async () => {
-  const users = await getMultipleDocuments('users');
+  const userData = await getMultipleDocuments('users');
 
   return {
     props: {
-      users,
+      userData,
     },
   };
 };

@@ -12,13 +12,13 @@ const handler = async (req, res) => {
         firstName: req.body.firstName,
       };
 
-      await collection.insertOne(newUser);
+      const result = await collection.insertOne(newUser);
 
       const documents = await collection.find().toArray();
 
-      const users = await JSON.parse(JSON.stringify(documents));
+      const userData = await JSON.parse(JSON.stringify(documents));
 
-      res.status(201).json({ message: 'User created.', users });
+      res.status(201).json({ message: 'User created.', result, userData });
     } catch (error) {
       res.status(500).json({ message: 'Unable to create new user.' });
     }

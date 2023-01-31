@@ -1,11 +1,13 @@
-const AccountList = (props) => {
+const AccountList = ({ accounts, selectedAccount, setSelectedAccount }) => {
   return (
     <section>
       <h2>Accounts</h2>
 
       <ul>
-        {props.accounts.map((account) => (
-          <li key={account._id}>{account.name}</li>
+        {accounts.map((account) => (
+          <li className={account._id === selectedAccount._id ? 'selected' : undefined} onClick={() => setSelectedAccount(account)} key={account._id}>
+            {account.name}
+          </li>
         ))}
       </ul>
     </section>
