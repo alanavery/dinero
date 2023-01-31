@@ -1,13 +1,16 @@
-const TransactionList = ({ selectedAccount }) => {
+const TransactionList = ({ selectedAccount, transactions }) => {
   return (
     <section>
       <h2>{selectedAccount.name}</h2>
 
-      {/* <ul>
-        {props.accounts.map((account) => (
-          <li key={account._id}>{account.name}</li>
+      <ul>
+        {transactions.map((transaction) => (
+          <li key={transaction._id}>
+            <div>{transaction.amount}</div>
+            <div>{transaction.date}</div>
+          </li>
         ))}
-      </ul> */}
+      </ul>
     </section>
   );
 };

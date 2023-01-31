@@ -85,7 +85,7 @@ const CreateTransactionForm = ({ accountId }) => {
 
         <div className="form-control">
           <label htmlFor="tag">Tag</label>
-          <input id="tag" type="text" required value={tag} onChange={(event) => setTag(event.target.value)} />
+          <input id="tag" type="text" value={tag} onChange={(event) => setTag(event.target.value)} />
         </div>
 
         <button>Submit</button>
