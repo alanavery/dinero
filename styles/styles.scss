@@ -4,6 +4,17 @@
   box-sizing: border-box;
 }
 
+main {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 0 auto;
+  width: 85%;
+
+  h1 {
+    grid-column: 1 / -1;
+  }
+}
+
 li.selected {
   text-decoration: underline;
 }
