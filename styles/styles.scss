@@ -7,11 +7,32 @@
 main {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 50px;
   margin: 0 auto;
   width: 85%;
 
   h1 {
     grid-column: 1 / -1;
+  }
+
+  section {
+    &.transactions {
+      ul {
+        li {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+
+          &.cleared {
+            font-weight: 700;
+          }
+        }
+      }
+
+      .transactions__summary {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
   }
 }
 
