@@ -20,7 +20,7 @@ const CreateTransactionForm = () => {
     event.preventDefault();
 
     const formData = {
-      amount: expense ? `-${amount}` : amount,
+      amount: Number(expense ? amount * -1 : amount),
       payee,
       date,
       cleared,
@@ -64,7 +64,7 @@ const CreateTransactionForm = () => {
 
         <div className="form-control">
           <label htmlFor="amount">Amount</label>
-          <input id="amount" type="text" pattern="\d*\.?\d*" required value={amount} onChange={(event) => setAmount(event.target.value)} />
+          <input id="amount" type="number" step="0.01" required value={amount} onChange={(event) => setAmount(event.target.value)} />
         </div>
 
         <div className="form-control">

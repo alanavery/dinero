@@ -7,8 +7,14 @@ const TransactionList = () => {
   const accountTransactions = userData.transactions.filter((transaction) => transaction.accountId === activeAccount._id);
   const clearedTransactions = accountTransactions.filter((transaction) => transaction.cleared);
 
-  const clearedBalance = clearedTransactions.reduce((accumulator, currentValue) => accumulator + Number(currentValue.amount), 0);
-  const pendingBalance = accountTransactions.reduce((accumulator, currentValue) => accumulator + Number(currentValue.amount), 0);
+  let pendingBalance = 0;
+  let clearedBalance = 0;
+
+  accountTransactions.forEach((transaction) => (pendingBalance += transaction.amount));
+  clearedTransactions.forEach((transaction) => (clearedBalance += transaction.amount));
+
+  console.log(pendingBalance);
+  console.log(clearedBalance);
 
   return (
     <section className="transactions">
@@ -34,12 +40,12 @@ const TransactionList = () => {
 
           <div className="transactions__summary">
             <div>Cleared Balance:</div>
-            <div>{`$${clearedBalance}`}</div>
+            <div>{`$${clearedBalance.toFixed(2)}`}</div>
           </div>
 
           <div className="transactions__summary">
             <div>Pending Balance:</div>
-            <div>{`$${pendingBalance}`}</div>
+            <div>{`$${pendingBalance.toFixed(2)}`}</div>
           </div>
         </>
       )}
