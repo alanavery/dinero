@@ -1,72 +1,74 @@
 import { MongoClient } from 'mongodb';
 
-const handler = async (req, res) => {
-  const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
+const getNewUserData = async (database, userId) => {
+  const newUserData = {};
 
+  const collectionNames = ['accounts', 'transactions', 'payees', 'tags'];
+
+  for (const collectionName of collectionNames) {
+    const collection = database.collection(collectionName);
+    const documents = await collection.find({ userId }).toArray();
+    const data = await JSON.parse(JSON.stringify(documents));
+    newUserData[collectionName] = data;
+  }
+
+  return newUserData;
+};
+
+const handler = async (req, res) => {
   if (req.method === 'POST') {
     try {
-      const database = client.db('dinero');
-
-      let payeeId;
-
-      const payeeCollection = database.collection('payees');
-      const payeeDocument = await payeeCollection.findOne({ name: req.body.payee });
-
-      if (!payeeDocument) {
-        const newPayee = {
-          name: req.body.payee,
-        };
-
-        const payeeResult = await payeeCollection.insertOne(newPayee);
-        payeeId = payeeResult.insertedId.toString();
-      } else {
-        payeeId = payeeDocument._id;
-      }
-
-      let tagId;
-
-      if (req.body.tag) {
-        const tagCollection = database.collection('tags');
-        const tagDocument = await tagCollection.findOne({ name: req.body.tag });
-
-        if (!tagDocument) {
-          const newTag = {
-            name: req.body.tag,
-          };
-
-          const tagResult = await tagCollection.insertOne(newTag);
-          tagId = tagResult.insertedId.toString();
-        } else {
-          tagId = tagDocument._id;
-        }
-      }
-
-      const transactionCollection = database.collection('transactions');
-
       const newTransaction = {
         amount: req.body.amount,
-        payeeId,
+        payeeId: null,
         date: req.body.date,
         cleared: req.body.cleared,
         budget: req.body.budget,
         split: req.body.split,
-        tagId,
+        tagId: null,
+        userId: req.body.userId,
         accountId: req.body.accountId,
       };
 
-      const transactionResult = await transactionCollection.insertOne(newTransaction);
+      const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
 
-      const transactionDocuments = await transactionCollection.find({ accountId: req.body.accountId }).toArray();
+      const database = client.db('dinero');
 
-      const transactionData = await JSON.parse(JSON.stringify(transactionDocuments));
+      const collectionNames = ['payees', 'tags'];
 
-      res.status(201).json({ message: 'Account created.', transactionData });
+      for (const collectionName of collectionNames) {
+        const singularName = collectionName.slice(0, -1);
+
+        if (req.body[singularName]) {
+          const collection = database.collection(collectionName);
+          const document = await collection.findOne({ name: req.body[singularName] });
+
+          if (document) {
+            newTransaction[`${singularName}Id`] = document._id;
+          } else {
+            const newDocument = {
+              name: req.body[singularName],
+              userId: req.body.userId,
+            };
+
+            const result = await collection.insertOne(newDocument);
+            newTransaction[`${singularName}Id`] = result.insertedId.toString();
+          }
+        }
+      }
+
+      const collection = database.collection('transactions');
+      const result = await collection.insertOne(newTransaction);
+
+      const newUserData = await getNewUserData(database, req.body.userId);
+
+      await client.close();
+
+      res.status(201).json({ message: 'Transaction created.', newUserData });
     } catch (error) {
-      res.status(500).json({ message: 'Unable to create new account.' });
+      res.status(500).json({ message: 'Unable to create new transaction.' });
     }
   }
-
-  await client.close();
 };
 
 export default handler;

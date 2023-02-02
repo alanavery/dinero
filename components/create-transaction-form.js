@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import { formatDate } from '@/helpers/date-utils';
+import UserContext from '@/store/user-context';
 
-const CreateTransactionForm = ({ accountId }) => {
+const CreateTransactionForm = () => {
+  const [expense, setExpense] = useState(true);
   const [amount, setAmount] = useState('');
   const [payee, setPayee] = useState('');
   const [date, setDate] = useState(formatDate(new Date()));
@@ -12,36 +14,38 @@ const CreateTransactionForm = ({ accountId }) => {
   const [tag, setTag] = useState('');
   const [message, setMessage] = useState('');
 
+  const { setUserData, activeAccount } = useContext(UserContext);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = {
-      amount,
+      amount: expense ? `-${amount}` : amount,
       payee,
       date,
       cleared,
       budget,
       split,
       tag,
-      accountId: accountId,
+      userId: activeAccount.userId,
+      accountId: activeAccount._id,
     };
-
-    console.log(formData);
 
     await axios
       .post('/api/transactions', formData)
       .then((response) => {
         console.log(response);
-        // props.setAccounts(response.data.accounts);
+        setUserData(response.data.newUserData);
       })
       .catch((error) => {
         console.log(error);
         setMessage(error.response.data.message);
       });
 
+    setExpense(true);
     setAmount('');
     setPayee('');
-    setDate(new Date());
+    setDate(formatDate(new Date()));
     setCleared(false);
     setBudget(true);
     setSplit(false);
@@ -53,6 +57,11 @@ const CreateTransactionForm = ({ accountId }) => {
       <h2>Create Transaction</h2>
 
       <form onSubmit={handleSubmit}>
+        <div className="form-control">
+          <label htmlFor="expense">Expense</label>
+          <input id="expense" type="checkbox" checked={expense} onChange={(event) => setExpense(event.target.checked)} />
+        </div>
+
         <div className="form-control">
           <label htmlFor="amount">Amount</label>
           <input id="amount" type="text" pattern="\d*\.?\d*" required value={amount} onChange={(event) => setAmount(event.target.value)} />

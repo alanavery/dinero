@@ -37,8 +37,6 @@ const UserPage = ({ newUserData }) => {
 };
 
 export const getServerSideProps = async (context) => {
-  const activeUserId = '63d6ec6b959e8bacbc61be18';
-
   const newUserData = {};
 
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
@@ -49,12 +47,12 @@ export const getServerSideProps = async (context) => {
 
   for (const collectionName of collectionNames) {
     const collection = database.collection(collectionName);
-    const documents = await collection.find({ userId: activeUserId }).toArray();
+    const documents = await collection.find({ userId: context.params.userId }).toArray();
     const data = await JSON.parse(JSON.stringify(documents));
     newUserData[collectionName] = data;
   }
 
-  client.close();
+  await client.close();
 
   return {
     props: {
