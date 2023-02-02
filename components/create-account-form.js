@@ -1,29 +1,32 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
+import UserContext from '@/store/user-context';
 
-const CreateAccountForm = ({ userId, accounts, setAccounts, setSelectedAccount }) => {
+const CreateAccountForm = ({ userId }) => {
   const [name, setName] = useState('');
   const [balance, setBalance] = useState('');
   const [creditAccount, setCreditAccount] = useState(false);
   const [creditLimit, setCreditLimit] = useState('');
   const [message, setMessage] = useState('');
 
+  const { setUserData, activeAccount } = useContext(UserContext);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = {
       name,
-      balance,
+      balance: Number(balance),
       creditAccount,
-      creditLimit,
+      creditLimit: Number(creditLimit),
       userId: userId,
     };
 
     await axios
       .post('/api/accounts', formData)
-      .then(async ({ data: { result, accountData } }) => {
-        setAccounts(accountData);
-        setSelectedAccount(accountData.find((account) => account._id === result.insertedId));
+      .then((response) => {
+        console.log(response);
+        setUserData(response.data.newUserData);
       })
       .catch((error) => {
         console.log(error);
@@ -48,7 +51,7 @@ const CreateAccountForm = ({ userId, accounts, setAccounts, setSelectedAccount }
 
         <div className="form-control">
           <label htmlFor="balance">Balance</label>
-          <input id="balance" type="text" pattern="\d*\.?\d*" required value={balance} onChange={(event) => setBalance(event.target.value)} />
+          <input id="balance" type="number" step="0.01" required value={balance} onChange={(event) => setBalance(event.target.value)} />
         </div>
 
         <div className="form-control">
@@ -59,7 +62,7 @@ const CreateAccountForm = ({ userId, accounts, setAccounts, setSelectedAccount }
         {creditAccount && (
           <div className="form-control">
             <label htmlFor="credit-limit">Credit Limit</label>
-            <input id="credit-limit" type="text" pattern="\d*\.?\d*" value={creditLimit} onChange={(event) => setCreditLimit(event.target.value)} />
+            <input id="credit-limit" type="number" step="0.01" value={creditLimit} onChange={(event) => setCreditLimit(event.target.value)} />
           </div>
         )}
 

@@ -1,21 +1,9 @@
 import { MongoClient } from 'mongodb';
-
-const getNewUserData = async (database, userId) => {
-  const newUserData = {};
-
-  const collectionNames = ['accounts', 'transactions', 'payees', 'tags'];
-
-  for (const collectionName of collectionNames) {
-    const collection = database.collection(collectionName);
-    const documents = await collection.find({ userId }).toArray();
-    const data = await JSON.parse(JSON.stringify(documents));
-    newUserData[collectionName] = data;
-  }
-
-  return newUserData;
-};
+import { getNewUserData } from '@/helpers/db-utils';
 
 const handler = async (req, res) => {
+  const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
+
   if (req.method === 'POST') {
     try {
       const newTransaction = {
@@ -30,8 +18,6 @@ const handler = async (req, res) => {
         accountId: req.body.accountId,
       };
 
-      const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
-
       const database = client.db('dinero');
 
       const collectionNames = ['payees', 'tags'];
@@ -44,7 +30,7 @@ const handler = async (req, res) => {
           const document = await collection.findOne({ name: req.body[singularName] });
 
           if (document) {
-            newTransaction[`${singularName}Id`] = document._id;
+            newTransaction[`${singularName}Id`] = document._id.toString();
           } else {
             const newDocument = {
               name: req.body[singularName],
@@ -58,16 +44,17 @@ const handler = async (req, res) => {
       }
 
       const collection = database.collection('transactions');
+
       const result = await collection.insertOne(newTransaction);
 
       const newUserData = await getNewUserData(database, req.body.userId);
-
-      await client.close();
 
       res.status(201).json({ message: 'Transaction created.', newUserData });
     } catch (error) {
       res.status(500).json({ message: 'Unable to create new transaction.' });
     }
+
+    await client.close();
   }
 };
 

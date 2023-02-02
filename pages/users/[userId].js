@@ -7,37 +7,43 @@ import CreateTransactionForm from '@/components/create-transaction-form';
 import TransactionList from '@/components/transaction-list';
 
 const UserPage = ({ newUserData }) => {
-  const { setUserData, activeAccount, setActiveAccount } = useContext(UserContext);
+  const { setUserData, setActiveUserId, activeAccount, isLoading } = useContext(UserContext);
 
   useEffect(() => {
     setUserData(newUserData);
-
-    if (newUserData.accounts[0]) {
-      setActiveAccount(newUserData.accounts[0]);
-    }
   }, []);
+
+  console.log('User page is rendering.');
 
   return (
     <main>
       <h1>User Page</h1>
 
-      <CreateAccountForm />
+      <CreateAccountForm userId={newUserData.userId} />
 
-      {activeAccount ? (
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : activeAccount ? (
         <>
           <AccountList />
           <CreateTransactionForm />
           <TransactionList />
         </>
       ) : (
-        <p>Loading...</p>
+        <p>No accounts</p>
       )}
     </main>
   );
 };
 
 export const getServerSideProps = async (context) => {
-  const newUserData = {};
+  const newUserData = {
+    userId: context.params.userId,
+    accounts: [],
+    transactions: [],
+    payees: [],
+    tags: [],
+  };
 
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
 

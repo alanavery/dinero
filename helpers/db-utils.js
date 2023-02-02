@@ -1,37 +1,20 @@
-import { MongoClient } from 'mongodb';
+export const getNewUserData = async (database, userId) => {
+  const newUserData = {
+    userId: userId,
+    accounts: [],
+    transactions: [],
+    payees: [],
+    tags: [],
+  };
 
-export const connectToDatabase = async () => {
-  const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
+  const collectionNames = ['accounts', 'transactions', 'payees', 'tags'];
 
-  return client;
-};
+  for (const collectionName of collectionNames) {
+    const collection = database.collection(collectionName);
+    const documents = await collection.find({ userId }).toArray();
+    const data = await JSON.parse(JSON.stringify(documents));
+    newUserData[collectionName] = data;
+  }
 
-export const getMultipleDocuments = async (collectionName, query) => {
-  const client = await connectToDatabase();
-
-  const database = client.db('dinero');
-  const collection = database.collection(collectionName);
-
-  const documents = await collection.find(query).toArray();
-
-  const data = await JSON.parse(JSON.stringify(documents));
-
-  await client.close();
-
-  return data;
-};
-
-export const getOneDocument = async (collectionName, query) => {
-  const client = await connectToDatabase();
-
-  const database = client.db('dinero');
-  const collection = database.collection(collectionName);
-
-  const documents = await collection.findOne(query);
-
-  const data = await JSON.parse(JSON.stringify(documents));
-
-  await client.close();
-
-  return data;
+  return newUserData;
 };

@@ -13,9 +13,6 @@ const TransactionList = () => {
   accountTransactions.forEach((transaction) => (pendingBalance += transaction.amount));
   clearedTransactions.forEach((transaction) => (clearedBalance += transaction.amount));
 
-  console.log(pendingBalance);
-  console.log(clearedBalance);
-
   return (
     <section className="transactions">
       <h2>{activeAccount.name}</h2>
