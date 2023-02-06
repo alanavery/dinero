@@ -35,7 +35,7 @@ main {
       ul {
         li {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: auto repeat(4, 1fr);
 
           &.cleared {
             font-weight: 700;
