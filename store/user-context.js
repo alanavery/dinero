@@ -1,50 +1,46 @@
-import { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import { createContext, useState, useRef, useEffect } from 'react';
 
 const UserContext = createContext({
-  userData: null,
-  setUserData: () => {},
-  activeUserId: null,
-  setActiveUserId: () => {},
-  activeAccount: null,
+  userId: '',
+  setUserId: () => {},
+  accounts: '',
+  setAccounts: () => {},
+  activeAccount: '',
   setActiveAccount: () => {},
-  isLoading: true,
-  setIsLoading: () => {},
+  transactionData: '',
+  setTransactionData: () => {},
 });
 
-export const UserContextProvider = ({ children }) => {
-  const [userData, setUserData] = useState('');
-  const [activeUserId, setActiveUserId] = useState('');
+export const UserContextProvider = ({ children, userData }) => {
+  const [userId, setUserId] = useState(userData.userId);
+  const [accounts, setAccounts] = useState(userData.accounts);
   const [activeAccount, setActiveAccount] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [transactionData, setTransactionData] = useState({
+    transactions: userData.transactions,
+    payees: userData.payees,
+    tags: userData.tags,
+  });
 
-  console.log('User context is rendering.');
+  const initialRender = useRef(true);
 
-  // useEffect(() => {
-  //   if (!userData) {
-  //     axios
-  //       .post('/api/transactions', formData)
-  //       .then((response) => {
-  //         console.log(response);
-  //         setUserData(response.data.newUserData);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         setMessage(error.response.data.message);
-  //       });
-  //   } else {
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (initialRender.current) {
+      setActiveAccount(accounts[0]);
+      initialRender.current = false;
+    } else {
+      setActiveAccount(accounts[accounts.length - 1]);
+    }
+  }, [accounts]);
 
   const context = {
-    userData,
-    setUserData,
-    activeUserId,
-    setActiveUserId,
+    userId,
+    setUserId,
+    accounts,
+    setAccounts,
     activeAccount,
     setActiveAccount,
-    isLoading,
-    setIsLoading,
+    transactionData,
+    setTransactionData,
   };
 
   return <UserContext.Provider value={context}>{children}</UserContext.Provider>;

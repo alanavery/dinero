@@ -2,9 +2,12 @@ import { useContext } from 'react';
 import UserContext from '@/store/user-context';
 
 const TransactionList = () => {
-  const { userData, activeAccount } = useContext(UserContext);
+  const {
+    activeAccount,
+    transactionData: { transactions, payees, tags },
+  } = useContext(UserContext);
 
-  const accountTransactions = userData.transactions.filter((transaction) => transaction.accountId === activeAccount._id);
+  const accountTransactions = transactions.filter((transaction) => transaction.accountId === activeAccount._id);
   const clearedTransactions = accountTransactions.filter((transaction) => transaction.cleared);
 
   let pendingBalance = 0;
@@ -21,8 +24,8 @@ const TransactionList = () => {
         <>
           <ul>
             {accountTransactions.map((transaction) => {
-              const payee = userData.payees.find((payee) => payee._id === transaction.payeeId);
-              const tag = userData.tags.find((tag) => tag._id === transaction.tagId);
+              const payee = payees.find((payee) => payee._id === transaction.payeeId);
+              const tag = tags.find((tag) => tag._id === transaction.tagId);
 
               return (
                 <li className={transaction.cleared ? 'cleared' : undefined} key={transaction._id}>

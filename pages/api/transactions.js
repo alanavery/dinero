@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import { getNewUserData } from '@/helpers/db-utils';
+import { getMultipleDocuments } from '@/helpers/db-utils';
 
 const handler = async (req, res) => {
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
@@ -20,9 +20,9 @@ const handler = async (req, res) => {
 
       const database = client.db('dinero');
 
-      const collectionNames = ['payees', 'tags'];
+      const collectionNames1 = ['payees', 'tags'];
 
-      for (const collectionName of collectionNames) {
+      for (const collectionName of collectionNames1) {
         const singularName = collectionName.slice(0, -1);
 
         if (req.body[singularName]) {
@@ -45,11 +45,17 @@ const handler = async (req, res) => {
 
       const collection = database.collection('transactions');
 
-      const result = await collection.insertOne(newTransaction);
+      await collection.insertOne(newTransaction);
 
-      const newUserData = await getNewUserData(database, req.body.userId);
+      const transactionData = {};
 
-      res.status(201).json({ message: 'Transaction created.', newUserData });
+      const collectionNames2 = ['transactions', 'payees', 'tags'];
+
+      for (const collectionName of collectionNames2) {
+        transactionData[collectionName] = await getMultipleDocuments(database, collectionName, req.body.userId);
+      }
+
+      res.status(201).json({ message: 'Transaction created.', transactionData });
     } catch (error) {
       res.status(500).json({ message: 'Unable to create new transaction.' });
     }

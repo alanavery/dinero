@@ -14,7 +14,7 @@ const CreateTransactionForm = () => {
   const [tag, setTag] = useState('');
   const [message, setMessage] = useState('');
 
-  const { setUserData, activeAccount } = useContext(UserContext);
+  const { activeAccount, setTransactionData } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,7 +35,7 @@ const CreateTransactionForm = () => {
       .post('/api/transactions', formData)
       .then((response) => {
         console.log(response);
-        setUserData(response.data.newUserData);
+        setTransactionData(response.data.transactionData);
       })
       .catch((error) => {
         console.log(error);

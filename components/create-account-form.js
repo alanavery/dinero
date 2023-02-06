@@ -9,7 +9,7 @@ const CreateAccountForm = ({ userId }) => {
   const [creditLimit, setCreditLimit] = useState('');
   const [message, setMessage] = useState('');
 
-  const { setUserData, activeAccount } = useContext(UserContext);
+  const { setAccounts } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,7 +26,7 @@ const CreateAccountForm = ({ userId }) => {
       .post('/api/accounts', formData)
       .then((response) => {
         console.log(response);
-        setUserData(response.data.newUserData);
+        setAccounts(response.data.accounts);
       })
       .catch((error) => {
         console.log(error);

@@ -1,32 +1,30 @@
 import { MongoClient } from 'mongodb';
-import { getNewUserData } from '@/helpers/db-utils';
+import { getMultipleDocuments } from '@/helpers/db-utils';
 
 const handler = async (req, res) => {
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
 
-  if (req.method === 'POST') {
+  if (req.method === 'GET') {
     try {
-      const newAccount = {
-        name: req.body.name,
-        startingBalance: req.body.balance,
-        clearedBalance: req.body.balance,
-        pendingBalance: req.body.balance,
-        creditAccount: req.body.creditAccount,
-        creditLimit: req.body.creditLimit,
-        userId: req.body.userId,
-      };
-
       const database = client.db('dinero');
 
-      const collection = database.collection('accounts');
+      const userData = {
+        userId: req.body.userId,
+        accounts: [],
+        transactions: [],
+        payees: [],
+        tags: [],
+      };
 
-      const result = await collection.insertOne(newAccount);
+      const collectionNames = ['accounts', 'transactions', 'payees', 'tags'];
 
-      const newUserData = await getNewUserData(database, req.body.userId);
+      for (const collectionName of collectionNames) {
+        userData[collectionName] = await getMultipleDocuments(database, collectionName, req.body.userId);
+      }
 
-      res.status(201).json({ message: 'Account created.', newUserData });
+      res.status(200).json({ userData });
     } catch (error) {
-      res.status(500).json({ message: 'Unable to create new account.' });
+      res.status(500).json({ message: 'Unable to get user data.' });
     }
   }
 
