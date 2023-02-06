@@ -9,13 +9,6 @@ const TransactionList = () => {
   } = useContext(UserContext);
 
   const accountTransactions = transactions.filter((transaction) => transaction.accountId === activeAccount._id);
-  // const clearedTransactions = accountTransactions.filter((transaction) => transaction.cleared);
-
-  // let pendingBalance = 0;
-  // let clearedBalance = 0;
-
-  // accountTransactions.forEach((transaction) => (pendingBalance += transaction.amount));
-  // clearedTransactions.forEach((transaction) => (clearedBalance += transaction.amount));
 
   return (
     <section className="transactions">
@@ -41,12 +34,12 @@ const TransactionList = () => {
 
           <div className="transactions__summary">
             <div>Cleared Balance:</div>
-            <div>{`$${calculateBalance(accountTransactions, true)}`}</div>
+            <div>{`$${calculateBalance(activeAccount.startingBalance, accountTransactions, true)}`}</div>
           </div>
 
           <div className="transactions__summary">
             <div>Account Balance:</div>
-            <div>{`$${calculateBalance(accountTransactions, false)}`}</div>
+            <div>{`$${calculateBalance(activeAccount.startingBalance, accountTransactions, false)}`}</div>
           </div>
         </>
       )}

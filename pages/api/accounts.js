@@ -8,9 +8,7 @@ const handler = async (req, res) => {
     try {
       const newAccount = {
         name: req.body.name,
-        startingBalance: req.body.balance,
-        clearedBalance: req.body.balance,
-        pendingBalance: req.body.balance,
+        startingBalance: req.body.startingBalance,
         creditAccount: req.body.creditAccount,
         creditLimit: req.body.creditLimit,
         userId: req.body.userId,

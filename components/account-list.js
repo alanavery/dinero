@@ -21,7 +21,7 @@ const AccountList = () => {
           return (
             <li className={account._id === activeAccount._id ? 'selected' : undefined} onClick={() => setActiveAccount(account)} key={account._id}>
               <div className="account__name">{account.name}</div>
-              <div>{`$${calculateBalance(accountTransactions, false)}`}</div>
+              <div>{`$${calculateBalance(account.startingBalance, accountTransactions, false)}`}</div>
             </li>
           );
         })}

@@ -4,7 +4,8 @@ import UserContext from '@/store/user-context';
 
 const CreateAccountForm = ({ userId }) => {
   const [name, setName] = useState('');
-  const [balance, setBalance] = useState('');
+  const [startingBalance, setStartingBalance] = useState('');
+  const [negativeBalance, setNegativeBalance] = useState(false);
   const [creditAccount, setCreditAccount] = useState(false);
   const [creditLimit, setCreditLimit] = useState('');
   const [message, setMessage] = useState('');
@@ -16,7 +17,7 @@ const CreateAccountForm = ({ userId }) => {
 
     const formData = {
       name,
-      balance: Number(balance),
+      startingBalance: Number(negativeBalance ? startingBalance * -1 : startingBalance),
       creditAccount,
       creditLimit: Number(creditLimit),
       userId: userId,
@@ -34,7 +35,8 @@ const CreateAccountForm = ({ userId }) => {
       });
 
     setName('');
-    setBalance('');
+    setStartingBalance('');
+    setNegativeBalance(false);
     setCreditAccount(false);
     setCreditLimit('');
   };
@@ -50,8 +52,13 @@ const CreateAccountForm = ({ userId }) => {
         </div>
 
         <div className="form-control">
-          <label htmlFor="balance">Balance</label>
-          <input id="balance" type="number" step="0.01" required value={balance} onChange={(event) => setBalance(event.target.value)} />
+          <label htmlFor="starting-balance">Starting Balance</label>
+          <input id="starting-balance" type="number" step="0.01" required value={startingBalance} onChange={(event) => setStartingBalance(event.target.value)} />
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="negative-balance">Negative Balance</label>
+          <input id="negative-balance" type="checkbox" checked={negativeBalance} onChange={(event) => setNegativeBalance(event.target.checked)} />
         </div>
 
         <div className="form-control">
