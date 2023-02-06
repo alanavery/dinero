@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import UserContext from '@/store/user-context';
+import { calculateBalance } from '@/helpers/balance-utils';
 
 const TransactionList = () => {
   const {
@@ -8,13 +9,13 @@ const TransactionList = () => {
   } = useContext(UserContext);
 
   const accountTransactions = transactions.filter((transaction) => transaction.accountId === activeAccount._id);
-  const clearedTransactions = accountTransactions.filter((transaction) => transaction.cleared);
+  // const clearedTransactions = accountTransactions.filter((transaction) => transaction.cleared);
 
-  let pendingBalance = 0;
-  let clearedBalance = 0;
+  // let pendingBalance = 0;
+  // let clearedBalance = 0;
 
-  accountTransactions.forEach((transaction) => (pendingBalance += transaction.amount));
-  clearedTransactions.forEach((transaction) => (clearedBalance += transaction.amount));
+  // accountTransactions.forEach((transaction) => (pendingBalance += transaction.amount));
+  // clearedTransactions.forEach((transaction) => (clearedBalance += transaction.amount));
 
   return (
     <section className="transactions">
@@ -40,12 +41,12 @@ const TransactionList = () => {
 
           <div className="transactions__summary">
             <div>Cleared Balance:</div>
-            <div>{`$${clearedBalance.toFixed(2)}`}</div>
+            <div>{`$${calculateBalance(accountTransactions, true)}`}</div>
           </div>
 
           <div className="transactions__summary">
-            <div>Pending Balance:</div>
-            <div>{`$${pendingBalance.toFixed(2)}`}</div>
+            <div>Account Balance:</div>
+            <div>{`$${calculateBalance(accountTransactions, false)}`}</div>
           </div>
         </>
       )}

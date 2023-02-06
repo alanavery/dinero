@@ -16,6 +16,21 @@ main {
   }
 
   section {
+    &.accounts {
+      ul {
+        li {
+          display: flex;
+          justify-content: space-between;
+
+          &.selected {
+            .account__name {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+
     &.transactions {
       ul {
         li {
@@ -34,8 +49,4 @@ main {
       }
     }
   }
-}
-
-li.selected {
-  text-decoration: underline;
 }
