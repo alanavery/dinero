@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import { getMultipleDocuments } from '@/helpers/db-utils';
+import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
 
 const handler = async (req, res) => {
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
@@ -26,8 +26,7 @@ const handler = async (req, res) => {
         const singularName = collectionName.slice(0, -1);
 
         if (req.body[singularName]) {
-          const collection = database.collection(collectionName);
-          const document = await collection.findOne({ name: req.body[singularName] });
+          const document = await getOneDocument(database, collectionName, { name: req.body[singularName] });
 
           if (document) {
             newTransaction[`${singularName}Id`] = document._id.toString();
@@ -38,6 +37,7 @@ const handler = async (req, res) => {
             };
 
             const result = await collection.insertOne(newDocument);
+
             newTransaction[`${singularName}Id`] = result.insertedId.toString();
           }
         }
@@ -52,7 +52,7 @@ const handler = async (req, res) => {
       const collectionNames2 = ['transactions', 'payees', 'tags'];
 
       for (const collectionName of collectionNames2) {
-        transactionData[collectionName] = await getMultipleDocuments(database, collectionName, req.body.userId);
+        transactionData[collectionName] = await getMultipleDocuments(database, collectionName, { userId: req.body.userId });
       }
 
       res.status(201).json({ message: 'Transaction created.', transactionData });

@@ -1,16 +1,21 @@
+import { useState } from 'react';
 import { MongoClient, ObjectId } from 'mongodb';
 import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
 import CreateTransactionForm from '@/components/create-transaction-form';
 import TransactionList from '@/components/transaction-list';
 
 const AccountPage = (props) => {
+  const [transactions, setTransactions] = useState(props.transactions);
+  const [payees, setPayees] = useState(props.payees);
+  const [tags, setTags] = useState(props.tags);
+
   return (
     <main>
       <h2>{props.account.name}</h2>
 
-      <TransactionList userId={props.userId} accountId={props.accountId} account={props.account} transactions={props.transactions} payees={props.payees} tags={props.tags} />
+      <CreateTransactionForm userId={props.userId} accountId={props.accountId} setTransactions={setTransactions} setPayees={setPayees} setTags={setTags} />
 
-      {/* <CreateTransactionForm /> */}
+      <TransactionList userId={props.userId} accountId={props.accountId} account={props.account} transactions={transactions} payees={payees} tags={tags} />
     </main>
   );
 };

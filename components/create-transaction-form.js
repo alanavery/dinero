@@ -1,9 +1,8 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { formatDate } from '@/helpers/date-utils';
-import UserContext from '@/store/user-context';
 
-const CreateTransactionForm = () => {
+const CreateTransactionForm = ({ userId, accountId, setTransactions, setPayees, setTags }) => {
   const [expense, setExpense] = useState(true);
   const [amount, setAmount] = useState('');
   const [payee, setPayee] = useState('');
@@ -13,8 +12,6 @@ const CreateTransactionForm = () => {
   const [split, setSplit] = useState(false);
   const [tag, setTag] = useState('');
   const [message, setMessage] = useState('');
-
-  const { activeAccount, setTransactionData } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,15 +24,18 @@ const CreateTransactionForm = () => {
       budget,
       split,
       tag,
-      userId: activeAccount.userId,
-      accountId: activeAccount._id,
+      userId,
+      accountId,
     };
 
     await axios
       .post('/api/transactions', formData)
       .then((response) => {
         console.log(response);
-        setTransactionData(response.data.transactionData);
+        setTransactions(response.data.transactionData.transactions);
+        setPayees(response.data.transactionData.payees);
+        setTags(response.data.transactionData.tags);
+        setMessage(response.data.message);
       })
       .catch((error) => {
         console.log(error);
