@@ -3,20 +3,11 @@ import axios from 'axios';
 import UserContext from '@/store/user-context';
 import { calculateBalance } from '@/helpers/balance-utils';
 
-const TransactionList = () => {
-  const {
-    userId,
-    activeAccount,
-    transactionData: { transactions, payees, tags },
-    setTransactionData,
-  } = useContext(UserContext);
-
-  const accountTransactions = transactions.filter((transaction) => transaction.accountId === activeAccount._id);
+const TransactionList = ({ userId, accountId, account, transactions, payees, tags }) => {
+  const accountTransactions = transactions.filter((transaction) => transaction.accountId === accountId);
 
   return (
     <section className="transactions">
-      <h2>{activeAccount.name}</h2>
-
       {accountTransactions.length >= 1 && (
         <>
           <ul>
@@ -59,12 +50,12 @@ const TransactionList = () => {
 
           <div className="transactions__summary">
             <div>Cleared Balance:</div>
-            <div>{`$${calculateBalance(activeAccount.startingBalance, accountTransactions, true)}`}</div>
+            <div>{`$${calculateBalance(account.startingBalance, accountTransactions, true)}`}</div>
           </div>
 
           <div className="transactions__summary">
             <div>Account Balance:</div>
-            <div>{`$${calculateBalance(activeAccount.startingBalance, accountTransactions, false)}`}</div>
+            <div>{`$${calculateBalance(account.startingBalance, accountTransactions, false)}`}</div>
           </div>
         </>
       )}
