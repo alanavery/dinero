@@ -20,11 +20,16 @@ const handler = async (req, res) => {
 
       await collection.insertOne(newAccount);
 
-      const accounts = await getMultipleDocuments(database, 'accounts', req.body.userId);
+      console.log('Test 1');
+
+      const accounts = await getMultipleDocuments(database, 'accounts', { userId: req.body.userId });
+
+      console.log('Test 2');
+      console.log(accounts);
 
       res.status(201).json({ message: 'Account created.', accounts });
     } catch (error) {
-      res.status(500).json({ message: 'Unable to create new account.' });
+      res.status(500).json({ message: 'Unable to create new account.', error });
     }
   }
 

@@ -1,16 +1,13 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import UserContext from '@/store/user-context';
 
-const CreateAccountForm = ({ userId }) => {
+const CreateAccountForm = ({ userId, setAccounts }) => {
   const [name, setName] = useState('');
   const [startingBalance, setStartingBalance] = useState('');
   const [negativeBalance, setNegativeBalance] = useState(false);
   const [creditAccount, setCreditAccount] = useState(false);
   const [creditLimit, setCreditLimit] = useState('');
   const [message, setMessage] = useState('');
-
-  const { setAccounts } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,7 +17,7 @@ const CreateAccountForm = ({ userId }) => {
       startingBalance: Number(negativeBalance ? startingBalance * -1 : startingBalance),
       creditAccount,
       creditLimit: Number(creditLimit),
-      userId: userId,
+      userId,
     };
 
     await axios
@@ -28,6 +25,7 @@ const CreateAccountForm = ({ userId }) => {
       .then((response) => {
         console.log(response);
         setAccounts(response.data.accounts);
+        setMessage(response.data.message);
       })
       .catch((error) => {
         console.log(error);

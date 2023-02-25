@@ -1,13 +1,19 @@
+import { useState } from 'react';
 import { MongoClient, ObjectId } from 'mongodb';
 import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
+import CreateAccountForm from '@/components/create-account-form';
 import AccountList from '@/components/account-list';
 
 const UserPage = (props) => {
+  const [accounts, setAccounts] = useState(props.accounts);
+
   return (
     <main>
       <h2>{`${props.user.firstName}'s Profile`}</h2>
 
-      <AccountList userId={props.userId} accounts={props.accounts} transactions={props.transactions} />
+      <CreateAccountForm userId={props.userId} setAccounts={setAccounts} />
+
+      <AccountList userId={props.userId} accounts={accounts} transactions={props.transactions} />
     </main>
   );
 };
