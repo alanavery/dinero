@@ -4,7 +4,7 @@ import { getMultipleDocuments } from '@/helpers/db-utils';
 const handler = async (req, res) => {
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
 
-  if (req.method === 'POST') {
+  if (req.method === 'PUT') {
     if (req.body.toggleStatus) {
       try {
         const database = client.db('dinero');
@@ -26,7 +26,7 @@ const handler = async (req, res) => {
         const collectionNames = ['transactions', 'payees', 'tags'];
 
         for (const collectionName of collectionNames) {
-          transactionData[collectionName] = await getMultipleDocuments(database, collectionName, req.body.userId);
+          transactionData[collectionName] = await getMultipleDocuments(database, collectionName, { userId: req.body.userId });
         }
 
         res.status(201).json({ message: 'Transaction updated.', transactionData });
@@ -34,9 +34,9 @@ const handler = async (req, res) => {
         res.status(500).json({ message: 'Unable to create new transaction.' });
       }
     }
-
-    await client.close();
   }
+
+  await client.close();
 };
 
 export default handler;

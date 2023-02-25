@@ -15,7 +15,7 @@ const AccountPage = (props) => {
 
       <CreateTransactionForm userId={props.userId} accountId={props.accountId} setTransactions={setTransactions} setPayees={setPayees} setTags={setTags} />
 
-      <TransactionList userId={props.userId} accountId={props.accountId} account={props.account} transactions={transactions} payees={payees} tags={tags} />
+      <TransactionList userId={props.userId} accountId={props.accountId} account={props.account} transactions={transactions} payees={payees} tags={tags} setTransactions={setTransactions} />
     </main>
   );
 };

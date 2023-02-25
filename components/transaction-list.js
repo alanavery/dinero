@@ -1,9 +1,7 @@
-import { useContext } from 'react';
 import axios from 'axios';
-import UserContext from '@/store/user-context';
 import { calculateBalance } from '@/helpers/balance-utils';
 
-const TransactionList = ({ userId, accountId, account, transactions, payees, tags }) => {
+const TransactionList = ({ userId, accountId, account, transactions, payees, tags, setTransactions }) => {
   const accountTransactions = transactions.filter((transaction) => transaction.accountId === accountId);
 
   return (
@@ -23,14 +21,13 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
                 };
 
                 await axios
-                  .post(`/api/transactions/${transaction._id}`, formData)
+                  .put(`/api/transactions/${transaction._id}`, formData)
                   .then((response) => {
                     console.log(response);
-                    setTransactionData(response.data.transactionData);
+                    setTransactions(response.data.transactionData.transactions);
                   })
                   .catch((error) => {
                     console.log(error);
-                    setMessage(error.response.data.message);
                   });
               };
 

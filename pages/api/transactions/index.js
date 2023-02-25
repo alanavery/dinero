@@ -20,25 +20,27 @@ const handler = async (req, res) => {
 
       const database = client.db('dinero');
 
-      const collectionNames1 = ['payees', 'tags'];
+      const collectionNames = ['transactions', 'payees', 'tags'];
 
-      for (const collectionName of collectionNames1) {
-        const singularName = collectionName.slice(0, -1);
+      for (const collectionName of collectionNames) {
+        if (collectionName !== 'transactions') {
+          const singularName = collectionName.slice(0, -1);
 
-        if (req.body[singularName]) {
-          const document = await getOneDocument(database, collectionName, { name: req.body[singularName] });
+          if (req.body[singularName]) {
+            const document = await getOneDocument(database, collectionName, { name: req.body[singularName] });
 
-          if (document) {
-            newTransaction[`${singularName}Id`] = document._id.toString();
-          } else {
-            const newDocument = {
-              name: req.body[singularName],
-              userId: req.body.userId,
-            };
+            if (document) {
+              newTransaction[`${singularName}Id`] = document._id.toString();
+            } else {
+              const newDocument = {
+                name: req.body[singularName],
+                userId: req.body.userId,
+              };
 
-            const result = await collection.insertOne(newDocument);
+              const result = await collection.insertOne(newDocument);
 
-            newTransaction[`${singularName}Id`] = result.insertedId.toString();
+              newTransaction[`${singularName}Id`] = result.insertedId.toString();
+            }
           }
         }
       }
@@ -49,9 +51,7 @@ const handler = async (req, res) => {
 
       const transactionData = {};
 
-      const collectionNames2 = ['transactions', 'payees', 'tags'];
-
-      for (const collectionName of collectionNames2) {
+      for (const collectionName of collectionNames) {
         transactionData[collectionName] = await getMultipleDocuments(database, collectionName, { userId: req.body.userId });
       }
 
@@ -59,9 +59,9 @@ const handler = async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: 'Unable to create new transaction.' });
     }
-
-    await client.close();
   }
+
+  await client.close();
 };
 
 export default handler;
