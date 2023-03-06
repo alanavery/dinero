@@ -1,16 +1,11 @@
-import { useState } from 'react';
 import { MongoClient } from 'mongodb';
 import { getMultipleDocuments } from '@/helpers/db-utils';
-import CreateUserForm from '@/components/create-user-form';
 import UserList from '@/components/user-list';
 
 const UsersPage = (props) => {
-  const [users, setUsers] = useState(props.users);
-
   return (
     <main>
-      <CreateUserForm setUsers={setUsers} />
-      <UserList users={users} />
+      <UserList users={props.users} />
     </main>
   );
 };
