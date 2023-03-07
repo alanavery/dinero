@@ -11,6 +11,7 @@ const UserList = ({ users }) => {
             <li key={user._id}>
               <Link href={`/users/${user._id}`}>{user.firstName}</Link>
               <Link href={`/users/${user._id}/edit`}>Edit</Link>
+              <Link href={`/users/${user._id}/delete`}>Delete</Link>
             </li>
           );
         })}

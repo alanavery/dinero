@@ -11,7 +11,7 @@ const EditUserForm = ({ user: { _id, firstName } }) => {
 
   const handleSubmit = async (values) => {
     const formData = values;
-    formData._id = _id;
+    formData.userId = _id;
 
     await axios
       .put('/api/users', values)
