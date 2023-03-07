@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 const UserList = ({ users }) => {
   return (
-    <section>
+    <section className="users">
       <h2>Users</h2>
 
       <ul>
@@ -10,6 +10,7 @@ const UserList = ({ users }) => {
           return (
             <li key={user._id}>
               <Link href={`/users/${user._id}`}>{user.firstName}</Link>
+              <Link href={`/users/${user._id}/edit`}>Edit</Link>
             </li>
           );
         })}

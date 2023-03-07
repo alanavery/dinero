@@ -4,14 +4,17 @@ import { Formik, Form } from 'formik';
 import axios from 'axios';
 import TextInput from './controls/text-input';
 
-const AddUserForm = () => {
+const EditUserForm = ({ user: { _id, firstName } }) => {
   const [message, setMessage] = useState('');
 
   const router = useRouter();
 
   const handleSubmit = async (values) => {
+    const formData = values;
+    formData._id = _id;
+
     await axios
-      .post('/api/users', values)
+      .put('/api/users', values)
       .then(() => router.push('/users'))
       .catch((error) => {
         console.log(error);
@@ -21,18 +24,18 @@ const AddUserForm = () => {
 
   return (
     <section>
-      <h2>Add User</h2>
+      <h2>Edit User</h2>
 
       <Formik
         initialValues={{
-          firstName: '',
+          firstName,
         }}
         onSubmit={handleSubmit}
       >
         <Form>
           <TextInput label="First Name" id="first-name" name="firstName" />
 
-          <button type="submit">Add</button>
+          <button type="submit">Edit</button>
         </Form>
       </Formik>
 
@@ -41,4 +44,4 @@ const AddUserForm = () => {
   );
 };
 
-export default AddUserForm;
+export default EditUserForm;

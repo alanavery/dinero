@@ -22,6 +22,15 @@ main {
   }
 
   section {
+    &.users {
+      ul {
+        li {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
+
     &.accounts {
       ul {
         li {
