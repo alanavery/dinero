@@ -1,19 +1,21 @@
-import DeleteUserConfirmation from '@/components/forms/delete-user-confirmation';
+import DeleteAccountConfirmation from '@/components/forms/delete-account-confirmation';
 
-const DeleteUserPage = (props) => {
-  return (
-    <main>
-      <DeleteUserConfirmation userId={props.userId} />
-    </main>
-  );
-};
+const DeleteAccountPage = (props) => (
+  <main>
+    <DeleteAccountConfirmation userId={props.userId} accountId={props.accountId} />
+  </main>
+);
 
 export const getServerSideProps = (context) => {
+  const userId = context.params.userId;
+  const accountId = context.params.accountId;
+
   return {
     props: {
-      userId: context.params.userId,
+      userId,
+      accountId,
     },
   };
 };
 
-export default DeleteUserPage;
+export default DeleteAccountPage;

@@ -33,18 +33,18 @@ const handler = async (req, res) => {
     await collection.updateOne(query, document);
   };
 
-  const deleteUser = async () => {
+  const deleteAccount = async () => {
     const database = client.db('dinero');
-    const collectionNames = ['users', 'accounts', 'transactions', 'payees', 'tags'];
+    const collectionNames = ['accounts', 'transactions'];
 
     for (const collectionName of collectionNames) {
       const collection = database.collection(collectionName);
 
-      if (collectionName === 'users') {
-        const query = { _id: ObjectId(req.body.userId) };
+      if (collectionName === 'accounts') {
+        const query = { _id: ObjectId(req.body.accountId) };
         await collection.deleteOne(query);
       } else {
-        const query = { userId: req.body.userId };
+        const query = { accountId: req.body.accountId };
         await collection.deleteMany(query);
       }
     }
@@ -72,7 +72,7 @@ const handler = async (req, res) => {
     }
   } else if (req.method === 'DELETE') {
     try {
-      await deleteUser();
+      await deleteAccount();
       res.status(200).json();
     } catch (error) {
       console.log(error);
