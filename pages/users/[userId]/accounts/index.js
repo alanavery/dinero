@@ -1,39 +1,33 @@
-import { useState } from 'react';
+import Link from 'next/link';
 import { MongoClient, ObjectId } from 'mongodb';
 import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
-import CreateAccountForm from '@/components/create-account-form';
 import AccountList from '@/components/account-list';
 
-const UserPage = (props) => {
-  const [accounts, setAccounts] = useState(props.accounts);
-
+const AccountsPage = (props) => {
   return (
     <main>
-      <h2>{`${props.user.firstName}'s Profile`}</h2>
+      <Link href={`/users/${props.userId}/accounts/add`}>Add Account</Link>
 
-      <CreateAccountForm userId={props.userId} setAccounts={setAccounts} />
-
-      <AccountList userId={props.userId} accounts={accounts} transactions={props.transactions} />
+      <AccountList userId={props.userId} user={props.user} accounts={props.accounts} transactions={props.transactions} />
     </main>
   );
 };
 
 export const getServerSideProps = async (context) => {
   const userId = context.params.userId;
-
   const props = {
     userId,
+    user: {},
+    accounts: [],
+    transactions: [],
   };
-
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
-
   const database = client.db('dinero');
-
   const collectionNames = ['users', 'accounts', 'transactions'];
 
   for (const collectionName of collectionNames) {
     if (collectionName === 'users') {
-      props['user'] = await getOneDocument(database, 'users', { _id: ObjectId(userId) });
+      props.user = await getOneDocument(database, 'users', { _id: ObjectId(userId) });
     } else {
       props[collectionName] = await getMultipleDocuments(database, collectionName, { userId });
     }
@@ -46,4 +40,4 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-export default UserPage;
+export default AccountsPage;

@@ -9,6 +9,7 @@ const handler = async (req, res) => {
     const document = {
       firstName: req.body.firstName,
     };
+
     await collection.insertOne(document);
   };
 
@@ -21,6 +22,7 @@ const handler = async (req, res) => {
         firstName: req.body.firstName,
       },
     };
+    
     await collection.updateOne(query, document);
   };
 

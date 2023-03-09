@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MongoClient, ObjectId } from 'mongodb';
 import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
-import CreateTransactionForm from '@/components/create-transaction-form';
+import CreateTransactionForm from '@/components/forms/create-transaction-form';
 import TransactionList from '@/components/transaction-list';
 
 const AccountPage = (props) => {

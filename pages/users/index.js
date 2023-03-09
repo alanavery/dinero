@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { MongoClient } from 'mongodb';
 import { getMultipleDocuments } from '@/helpers/db-utils';
 import UserList from '@/components/user-list';
@@ -5,6 +6,8 @@ import UserList from '@/components/user-list';
 const UsersPage = (props) => {
   return (
     <main>
+      <Link href="/users/add">Add User</Link>
+
       <UserList users={props.users} />
     </main>
   );
