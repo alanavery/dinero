@@ -1,28 +1,33 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import { getOneDocument } from '@/helpers/db-utils';
-import EditUserForm from '@/components/forms/edit-user-form';
+import EditAccountForm from '@/components/forms/edit-account-form';
 
-const EditUserPage = (props) => {
+const EditAccountPage = (props) => {
   return (
     <main>
-      <EditUserForm user={props.user} />
+      <EditAccountForm userId={props.userId} accountId={props.accountId} account={props.account} />
     </main>
   );
 };
 
 export const getServerSideProps = async (context) => {
+  const userId = context.params.userId;
+  const accountId = context.params.accountId;
+
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
   const database = client.db('dinero');
-  
-  const user = await getOneDocument(database, 'users', { _id: ObjectId(context.params.userId) });
+
+  const account = await getOneDocument(database, 'accounts', { _id: ObjectId(accountId) });
 
   await client.close();
 
   return {
     props: {
-      user,
+      userId,
+      accountId,
+      account,
     },
   };
 };
 
-export default EditUserPage;
+export default EditAccountPage;

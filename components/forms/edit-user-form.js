@@ -10,11 +10,13 @@ const EditUserForm = ({ user: { _id, firstName } }) => {
   const router = useRouter();
 
   const handleSubmit = async (values) => {
-    const formData = values;
-    formData.userId = _id;
+    const formData = {
+      firstName: values.firstName,
+      userId: _id,
+    };
 
     await axios
-      .put('/api/users', values)
+      .put('/api/users', formData)
       .then(() => router.push('/users'))
       .catch((error) => {
         console.log(error);

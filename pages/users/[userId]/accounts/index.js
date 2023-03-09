@@ -15,12 +15,14 @@ const AccountsPage = (props) => {
 
 export const getServerSideProps = async (context) => {
   const userId = context.params.userId;
+
   const props = {
     userId,
     user: {},
     accounts: [],
     transactions: [],
   };
+
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
   const database = client.db('dinero');
   const collectionNames = ['users', 'accounts', 'transactions'];
