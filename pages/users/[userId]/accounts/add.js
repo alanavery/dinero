@@ -8,10 +8,14 @@ const AddAccountPage = (props) => {
   );
 };
 
-export const getServerSideProps = (context) => ({
-  props: {
-    userId: context.params.userId,
-  },
-});
+export const getServerSideProps = (context) => {
+  const userId = context.params.userId;
+
+  return {
+    props: {
+      userId,
+    },
+  };
+};
 
 export default AddAccountPage;

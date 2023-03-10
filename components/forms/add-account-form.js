@@ -42,21 +42,23 @@ const AddAccountForm = ({ userId }) => {
         }}
         onSubmit={handleSubmit}
       >
-        {({ values }) => (
-          <Form>
-            <TextInput label="Name" id="name" name="name" />
+        {({ values }) => {
+          return (
+            <Form>
+              <TextInput label="Name" id="name" name="name" />
 
-            <TextInput label="Starting Balance" id="starting-balance" name="startingBalance" />
+              <TextInput label="Starting Balance" id="starting-balance" name="startingBalance" />
 
-            <CheckboxInput name="negativeBalance">Negative Balance</CheckboxInput>
+              <CheckboxInput name="negativeBalance">Negative Balance</CheckboxInput>
 
-            <CheckboxInput name="creditAccount">Credit Account</CheckboxInput>
+              <CheckboxInput name="creditAccount">Credit Account</CheckboxInput>
 
-            {values.creditAccount && <TextInput label="Credit Limit" id="credit-limit" name="creditLimit" />}
+              {values.creditAccount && <TextInput label="Credit Limit" id="credit-limit" name="creditLimit" />}
 
-            <button type="submit">Add</button>
-          </Form>
-        )}
+              <button type="submit">Add</button>
+            </Form>
+          );
+        }}
       </Formik>
 
       {message && <p>{message}</p>}
