@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import axios from 'axios';
 import { calculateBalance } from '@/helpers/balance-utils';
 
@@ -40,6 +41,8 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
                   <div>{payee && payee.name}</div>
                   <div>{`$${transaction.amount}`}</div>
                   <div>{tag && tag.name}</div>
+                  <Link href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/edit`}>Edit</Link>
+                  <Link href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/delete`}>Delete</Link>
                 </li>
               );
             })}

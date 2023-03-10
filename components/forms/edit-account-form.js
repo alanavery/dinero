@@ -5,7 +5,7 @@ import axios from 'axios';
 import TextInput from './controls/text-input';
 import CheckboxInput from './controls/checkbox-input';
 
-const EditAccountForm = ({ userId, accountId, account: { name, startingBalance, negativeBalance, creditAccount, creditLimit } }) => {
+const EditAccountForm = ({ userId, accountId, account }) => {
   const [message, setMessage] = useState('');
 
   const router = useRouter();
@@ -34,29 +34,31 @@ const EditAccountForm = ({ userId, accountId, account: { name, startingBalance, 
 
       <Formik
         initialValues={{
-          name,
-          startingBalance,
-          negativeBalance,
-          creditAccount,
-          creditLimit,
+          name: account.name,
+          startingBalance: account.startingBalance,
+          negativeBalance: account.negativeBalance,
+          creditAccount: account.creditAccount,
+          creditLimit: account.creditLimit,
         }}
         onSubmit={handleSubmit}
       >
-        {({ values }) => (
-          <Form>
-            <TextInput label="Name" id="name" name="name" />
+        {({ values }) => {
+          return (
+            <Form>
+              <TextInput label="Name" id="name" name="name" />
 
-            <TextInput label="Starting Balance" id="starting-balance" name="startingBalance" />
+              <TextInput label="Starting Balance" id="starting-balance" name="startingBalance" />
 
-            <CheckboxInput name="negativeBalance">Negative Balance</CheckboxInput>
+              <CheckboxInput name="negativeBalance">Negative Balance</CheckboxInput>
 
-            <CheckboxInput name="creditAccount">Credit Account</CheckboxInput>
+              <CheckboxInput name="creditAccount">Credit Account</CheckboxInput>
 
-            {values.creditAccount && <TextInput label="Credit Limit" id="credit-limit" name="creditLimit" />}
+              {values.creditAccount && <TextInput label="Credit Limit" id="credit-limit" name="creditLimit" />}
 
-            <button type="submit">Edit</button>
-          </Form>
-        )}
+              <button type="submit">Edit</button>
+            </Form>
+          );
+        }}
       </Formik>
 
       {message && <p>{message}</p>}

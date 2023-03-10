@@ -44,9 +44,7 @@ export const getServerSideProps = async (context) => {
 
   await client.close();
 
-  return {
-    props,
-  };
+  return { props };
 };
 
 export default TransactionsPage;

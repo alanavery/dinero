@@ -19,18 +19,19 @@ const handler = async (req, res) => {
 
   const editAccount = async () => {
     const database = client.db('dinero');
+
     const collection = database.collection('accounts');
+
     const query = { _id: ObjectId(req.body.accountId) };
+    
     const document = {
-      $set: {
-        name: req.body.name,
-        startingBalance: req.body.startingBalance,
-        creditAccount: req.body.creditAccount,
-        creditLimit: req.body.creditLimit,
-      },
+      name: req.body.name,
+      startingBalance: req.body.startingBalance,
+      creditAccount: req.body.creditAccount,
+      creditLimit: req.body.creditLimit,
     };
 
-    await collection.updateOne(query, document);
+    await collection.updateOne(query, { $set: document });
   };
 
   const deleteAccount = async () => {

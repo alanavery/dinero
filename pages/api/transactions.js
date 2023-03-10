@@ -31,13 +31,11 @@ const handler = async (req, res) => {
         };
 
         const secondaryDocument = {
-          $setOnInsert: {
-            name: req.body[singularName],
-            userId: req.body.userId,
-          },
+          name: req.body[singularName],
+          userId: req.body.userId,
         };
 
-        const result = await secondaryCollection.findOneAndUpdate(query, secondaryDocument, { upsert: true });
+        const result = await secondaryCollection.findOneAndUpdate(query, { $setOnInsert: secondaryDocument }, { upsert: true });
 
         primaryDocument[`${singularName}Id`] = result.value ? result.value._id.toString() : result.lastErrorObject.upserted.toString();
       }
@@ -48,20 +46,50 @@ const handler = async (req, res) => {
     await primaryCollection.insertOne(primaryDocument);
   };
 
-  const editAccount = async () => {
+  const editTransaction = async () => {
     const database = client.db('dinero');
-    const collection = database.collection('accounts');
-    const query = { _id: ObjectId(req.body.accountId) };
-    const document = {
-      $set: {
-        name: req.body.name,
-        startingBalance: req.body.startingBalance,
-        creditAccount: req.body.creditAccount,
-        creditLimit: req.body.creditLimit,
-      },
+
+    const primaryDocument = {
+      amount: req.body.amount,
+      payeeId: null,
+      date: req.body.date,
+      cleared: req.body.cleared,
+      budget: req.body.budget,
+      split: req.body.split,
+      tagId: null,
     };
 
-    await collection.updateOne(query, document);
+    const collectionNames = ['payees', 'tags'];
+
+    for (const collectionName of collectionNames) {
+      const singularName = collectionName.slice(0, -1);
+
+      if (req.body[singularName]) {
+        const secondaryCollection = database.collection(collectionName);
+
+        const secondaryQuery = {
+          $and: [{ name: req.body[singularName] }, { userId: req.body.userId }],
+        };
+
+        const secondaryDocument = {
+          name: req.body[singularName],
+          userId: req.body.userId,
+        };
+
+        const result = await secondaryCollection.findOneAndUpdate(secondaryQuery, { $setOnInsert: secondaryDocument }, { upsert: true });
+
+        primaryDocument[`${singularName}Id`] = result.value ? result.value._id.toString() : result.lastErrorObject.upserted.toString();
+      }
+    }
+
+    const primaryCollection = database.collection('transactions');
+
+    const primaryQuery = { _id: ObjectId(req.body.transactionId) };
+
+    console.log('primaryDocument:', primaryDocument);
+    console.log('primaryQuery:', primaryQuery);
+
+    await primaryCollection.updateOne(primaryQuery, { $set: primaryDocument });
   };
 
   const deleteAccount = async () => {
@@ -93,11 +121,11 @@ const handler = async (req, res) => {
     }
   } else if (req.method === 'PUT') {
     try {
-      await editAccount();
+      await editTransaction();
       res.status(200).json();
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: 'Unable to edit account' });
+      res.status(500).json({ message: 'Unable to edit transaction' });
     } finally {
       await client.close();
     }
