@@ -6,7 +6,9 @@ import UserList from '@/components/user-list';
 const UsersPage = (props) => {
   return (
     <main>
-      <Link href="/users/add">Add User</Link>
+      <Link className="button button--primary" href="/users/add">
+        Add User
+      </Link>
 
       <UserList users={props.users} />
     </main>
@@ -15,7 +17,9 @@ const UsersPage = (props) => {
 
 export const getServerSideProps = async () => {
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
+
   const database = client.db('dinero');
+
   const users = await getMultipleDocuments(database, 'users');
 
   await client.close();
