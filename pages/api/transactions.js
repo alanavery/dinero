@@ -92,21 +92,14 @@ const handler = async (req, res) => {
     await primaryCollection.updateOne(primaryQuery, { $set: primaryDocument });
   };
 
-  const deleteAccount = async () => {
+  const deleteTransaction = async () => {
     const database = client.db('dinero');
-    const collectionNames = ['accounts', 'transactions'];
 
-    for (const collectionName of collectionNames) {
-      const collection = database.collection(collectionName);
+    const collection = database.collection('transactions');
 
-      if (collectionName === 'accounts') {
-        const query = { _id: ObjectId(req.body.accountId) };
-        await collection.deleteOne(query);
-      } else {
-        const query = { accountId: req.body.accountId };
-        await collection.deleteMany(query);
-      }
-    }
+    const query = { _id: ObjectId(req.body.transactionId) };
+
+    await collection.deleteOne(query);
   };
 
   if (req.method === 'POST') {
@@ -131,7 +124,7 @@ const handler = async (req, res) => {
     }
   } else if (req.method === 'DELETE') {
     try {
-      await deleteAccount();
+      await deleteTransaction();
       res.status(200).json();
     } catch (error) {
       console.log(error);

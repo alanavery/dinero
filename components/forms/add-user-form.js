@@ -30,7 +30,7 @@ const AddUserForm = () => {
         onSubmit={handleSubmit}
       >
         <Form>
-          <TextInput label="First Name" id="first-name" name="firstName" />
+          <TextInput label="First Name" id="first-name" name="firstName" required />
 
           <button type="submit">Add</button>
         </Form>

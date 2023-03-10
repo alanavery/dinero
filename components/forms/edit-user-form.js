@@ -35,7 +35,7 @@ const EditUserForm = ({ user: { _id, firstName } }) => {
         onSubmit={handleSubmit}
       >
         <Form>
-          <TextInput label="First Name" id="first-name" name="firstName" />
+          <TextInput label="First Name" id="first-name" name="firstName" required />
 
           <button type="submit">Edit</button>
         </Form>

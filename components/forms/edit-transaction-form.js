@@ -21,7 +21,6 @@ const EditTransactionForm = ({ userId, accountId, transactionId, transaction, pa
       split: values.split,
       tag: values.tag,
       userId,
-      accountId,
       transactionId
     };
 

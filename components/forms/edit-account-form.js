@@ -45,9 +45,9 @@ const EditAccountForm = ({ userId, accountId, account }) => {
         {({ values }) => {
           return (
             <Form>
-              <TextInput label="Name" id="name" name="name" />
+              <TextInput label="Name" id="name" name="name" required />
 
-              <TextInput label="Starting Balance" id="starting-balance" name="startingBalance" />
+              <TextInput label="Starting Balance" id="starting-balance" name="startingBalance" required />
 
               <CheckboxInput name="negativeBalance">Negative Balance</CheckboxInput>
 
