@@ -22,11 +22,13 @@ const DeleteTransactionConfirmation = ({ userId, accountId, transactionId }) => 
     <section>
       <h2>Delete Transaction</h2>
 
-      <button onClick={handleClick}>Confirm</button>
+      <div className="delete__buttons">
+        <button onClick={handleClick}>Confirm</button>
 
-      <Link href={`/users/${userId}/accounts/${accountId}/transactions`}>
-        <button>Cancel</button>
-      </Link>
+        <Link className="button" href={`/users/${userId}/accounts/${accountId}/transactions`}>
+          Cancel
+        </Link>
+      </div>
 
       {message && <p>{message}</p>}
     </section>

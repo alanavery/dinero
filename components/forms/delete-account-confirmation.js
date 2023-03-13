@@ -22,11 +22,13 @@ const DeleteAccountConfirmation = ({ userId, accountId }) => {
     <section>
       <h2>Delete Account</h2>
 
-      <button onClick={handleClick}>Confirm</button>
+      <div className="delete__buttons">
+        <button onClick={handleClick}>Confirm</button>
 
-      <Link href={`/users/${userId}/accounts`}>
-        <button>Cancel</button>
-      </Link>
+        <Link className="button" href={`/users/${userId}/accounts`}>
+          Cancel
+        </Link>
+      </div>
 
       {message && <p>{message}</p>}
     </section>

@@ -1,8 +1,13 @@
+import Link from 'next/link';
 import AddTransactionForm from '@/components/forms/add-transaction-form';
 
 const AddTransactionPage = (props) => {
   return (
     <main>
+      <Link className="button" href={`/users/${props.userId}/accounts/${props.accountId}/transactions`}>
+        Back
+      </Link>
+
       <AddTransactionForm userId={props.userId} accountId={props.accountId} />
     </main>
   );

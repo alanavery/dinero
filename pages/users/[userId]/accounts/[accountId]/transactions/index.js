@@ -8,7 +8,15 @@ const TransactionsPage = (props) => {
     <main>
       <h2>{props.account.name}</h2>
 
-      <Link className="button button--primary" href={`/users/${props.userId}/accounts/${props.accountId}/transactions/add`}>Add Transaction</Link>
+      <div className="nav--secondary">
+        <Link className="button" href={`/users/${props.userId}/accounts`}>
+          Back
+        </Link>
+
+        <Link className="button" href={`/users/${props.userId}/accounts/${props.accountId}/transactions/add`}>
+          Add Transaction
+        </Link>
+      </div>
 
       <TransactionList userId={props.userId} accountId={props.accountId} account={props.account} transactions={props.transactions} payees={props.payees} tags={props.tags} />
     </main>

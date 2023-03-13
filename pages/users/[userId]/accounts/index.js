@@ -6,7 +6,15 @@ import AccountList from '@/components/account-list';
 const AccountsPage = (props) => {
   return (
     <main>
-      <Link className="button button--primary" href={`/users/${props.userId}/accounts/add`}>Add Account</Link>
+      <div className="nav--secondary">
+        <Link className="button" href={`/users`}>
+          Back
+        </Link>
+
+        <Link className="button" href={`/users/${props.userId}/accounts/add`}>
+          Add Account
+        </Link>
+      </div>
 
       <AccountList userId={props.userId} user={props.user} accounts={props.accounts} transactions={props.transactions} />
     </main>

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { MongoClient, ObjectId } from 'mongodb';
 import { getOneDocument } from '@/helpers/db-utils';
 import EditTransactionForm from '@/components/forms/edit-transaction-form';
@@ -5,6 +6,10 @@ import EditTransactionForm from '@/components/forms/edit-transaction-form';
 const EditTransactionPage = (props) => {
   return (
     <main>
+      <Link className="button" href={`/users/${props.userId}/accounts/${props.accountId}/transactions`}>
+        Back
+      </Link>
+
       <EditTransactionForm userId={props.userId} accountId={props.accountId} transactionId={props.transactionId} transaction={props.transaction} payee={props.payee} tag={props.tag} />
     </main>
   );

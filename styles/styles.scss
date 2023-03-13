@@ -70,10 +70,6 @@ form {
       }
     }
   }
-
-  button {
-    justify-self: flex-start;
-  }
 }
 
 button,
@@ -90,10 +86,6 @@ button,
   &:hover {
     color: inherit;
     background-color: $secondary;
-  }
-
-  &.button--primary {
-    justify-self: center;
   }
 }
 
@@ -127,6 +119,11 @@ body {
 
       main {
         align-self: flex-start;
+
+        .nav--secondary {
+          display: flex;
+          justify-content: space-between;
+        }
 
         section {
           display: grid;

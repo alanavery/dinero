@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { MongoClient, ObjectId } from 'mongodb';
 import { getOneDocument } from '@/helpers/db-utils';
 import EditAccountForm from '@/components/forms/edit-account-form';
@@ -5,6 +6,10 @@ import EditAccountForm from '@/components/forms/edit-account-form';
 const EditAccountPage = (props) => {
   return (
     <main>
+      <Link className="button" href={`/users/${props.userId}/accounts`}>
+        Back
+      </Link>
+
       <EditAccountForm userId={props.userId} accountId={props.accountId} account={props.account} />
     </main>
   );
@@ -15,7 +20,7 @@ export const getServerSideProps = async (context) => {
   const accountId = context.params.accountId;
 
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
-  
+
   const database = client.db('dinero');
 
   const account = await getOneDocument(database, 'accounts', { _id: ObjectId(accountId) });

@@ -6,7 +6,7 @@ import UserList from '@/components/user-list';
 const UsersPage = (props) => {
   return (
     <main>
-      <Link className="button button--primary" href="/users/add">
+      <Link className="button" href="/users/add">
         Add User
       </Link>
 
