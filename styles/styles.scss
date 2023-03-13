@@ -133,6 +133,18 @@ body {
           &.users,
           &.accounts,
           &.transactions {
+            .accounts__summary,
+            .transactions__summary {
+              display: grid;
+              grid-template-columns: 100%;
+              row-gap: $spacing-sm;
+
+              > div {
+                display: grid;
+                grid-template-columns: 1fr auto;
+              }
+            }
+
             > ul {
               border-top: 1px solid $primary;
               border-bottom: 1px solid $primary;
@@ -169,19 +181,6 @@ body {
                 .list__item__buttons {
                   row-gap: $spacing-md;
                 }
-              }
-            }
-          }
-
-          &.transactions {
-            .transactions__summary {
-              display: grid;
-              grid-template-columns: 100%;
-              row-gap: $spacing-sm;
-
-              > div {
-                display: grid;
-                grid-template-columns: 1fr auto;
               }
             }
           }

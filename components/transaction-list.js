@@ -11,13 +11,13 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
         <>
           <div className="transactions__summary">
             <div>
-              <div>Cleared Balance:</div>
-              <div>{`$${calculateBalance(account.startingBalance, accountTransactions, true)}`}</div>
+              <div>Account Balance:</div>
+              <div>{`$${calculateBalance(account.startingBalance, accountTransactions)}`}</div>
             </div>
 
             <div>
-              <div>Account Balance:</div>
-              <div>{`$${calculateBalance(account.startingBalance, accountTransactions, false)}`}</div>
+              <div>Cleared Balance:</div>
+              <div>{`$${calculateBalance(account.startingBalance, accountTransactions, 'cleared')}`}</div>
             </div>
           </div>
 
