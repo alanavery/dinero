@@ -4,7 +4,8 @@
 
 $mobile: 425px;
 $spacing-lg: clamp(0px, 5vw, ($mobile * 0.05));
-$spacing-md: clamp(0px, 5vw, ($mobile * 0.025));
+$spacing-md: clamp(0px, 5vw, ($mobile * 0.02));
+$spacing-sm: clamp(0px, 5vw, ($mobile * 0.01));
 
 $primary: #777;
 $secondary: #ddd;
@@ -48,11 +49,21 @@ a {
   }
 }
 
+form {
+  .form__control {
+    input {
+      font-size: inherit;
+      font-family: inherit;
+    }
+  }
+}
+
 .button {
   padding: 0.5em 1em;
   background-color: $tertiary;
   border: 1px solid $primary;
   border-radius: 10px;
+  text-align: center;
 
   &:hover {
     color: inherit;
@@ -96,7 +107,13 @@ body {
         align-self: flex-start;
 
         section {
-          &.users {
+          &.users,
+          &.accounts,
+          &.transactions {
+            display: grid;
+            grid-template-columns: 100%;
+            row-gap: $spacing-lg;
+
             > ul {
               border-top: 1px solid $primary;
               border-bottom: 1px solid $primary;
@@ -112,11 +129,36 @@ body {
                   border-bottom: 1px solid $primary;
                 }
 
+                .list__item__text,
                 .list__item__buttons {
                   display: grid;
                   grid-template-columns: 100%;
+                }
+
+                .list__item__text {
+                  row-gap: $spacing-sm;
+
+                  > a {
+                    font-weight: 700;
+                  }
+                }
+
+                .list__item__buttons {
                   row-gap: $spacing-md;
                 }
+              }
+            }
+          }
+
+          &.transactions {
+            .transactions__summary {
+              display: grid;
+              grid-template-columns: 100%;
+              row-gap: $spacing-sm;
+
+              > div {
+                display: grid;
+                grid-template-columns: 1fr auto;
               }
             }
           }

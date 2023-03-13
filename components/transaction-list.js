@@ -9,6 +9,18 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
     <section className="transactions">
       {accountTransactions.length >= 1 && (
         <>
+          <div className="transactions__summary">
+            <div>
+              <div>Cleared Balance:</div>
+              <div>{`$${calculateBalance(account.startingBalance, accountTransactions, true)}`}</div>
+            </div>
+
+            <div>
+              <div>Account Balance:</div>
+              <div>{`$${calculateBalance(account.startingBalance, accountTransactions, false)}`}</div>
+            </div>
+          </div>
+
           <ul>
             {accountTransactions.map((transaction) => {
               const payee = payees.find((payee) => payee._id === transaction.payeeId);
@@ -34,29 +46,28 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
 
               return (
                 <li className={transaction.cleared ? 'cleared' : undefined} key={transaction._id}>
-                  <form>
-                    <input type="checkbox" checked={transaction.cleared} onChange={toggleStatus} />
-                  </form>
-                  <div>{transaction.date}</div>
-                  <div>{payee && payee.name}</div>
-                  <div>{`$${transaction.amount}`}</div>
-                  <div>{tag && tag.name}</div>
-                  <Link href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/edit`}>Edit</Link>
-                  <Link href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/delete`}>Delete</Link>
+                  <div className="list__item__text">
+                    <form>
+                      <input type="checkbox" checked={transaction.cleared} onChange={toggleStatus} />
+                    </form>
+                    <div>{transaction.date}</div>
+                    <div>{payee && payee.name}</div>
+                    <div>{`$${transaction.amount}`}</div>
+                    <div>{tag && tag.name}</div>
+                  </div>
+
+                  <div className="list__item__buttons">
+                    <Link className="button" href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/edit`}>
+                      Edit
+                    </Link>
+                    <Link className="button" href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/delete`}>
+                      Delete
+                    </Link>
+                  </div>
                 </li>
               );
             })}
           </ul>
-
-          <div className="transactions__summary">
-            <div>Cleared Balance:</div>
-            <div>{`$${calculateBalance(account.startingBalance, accountTransactions, true)}`}</div>
-          </div>
-
-          <div className="transactions__summary">
-            <div>Account Balance:</div>
-            <div>{`$${calculateBalance(account.startingBalance, accountTransactions, false)}`}</div>
-          </div>
         </>
       )}
     </section>

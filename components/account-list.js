@@ -12,10 +12,19 @@ const AccountList = ({ userId, user, accounts, transactions }) => {
 
           return (
             <li key={account._id}>
-              <Link href={`/users/${userId}/accounts/${account._id}/transactions`}>{account.name}</Link>
-              <div>{`$${calculateBalance(account.startingBalance, accountTransactions, false)}`}</div>
-              <Link href={`/users/${userId}/accounts/${account._id}/edit`}>Edit</Link>
-              <Link href={`/users/${userId}/accounts/${account._id}/delete`}>Delete</Link>
+              <div className="list__item__text">
+                <Link href={`/users/${userId}/accounts/${account._id}/transactions`}>{account.name}</Link>
+                <div>{`$${calculateBalance(account.startingBalance, accountTransactions, false)}`}</div>
+              </div>
+
+              <div className="list__item__buttons">
+                <Link className="button" href={`/users/${userId}/accounts/${account._id}/edit`}>
+                  Edit
+                </Link>
+                <Link className="button" href={`/users/${userId}/accounts/${account._id}/delete`}>
+                  Delete
+                </Link>
+              </div>
             </li>
           );
         })}

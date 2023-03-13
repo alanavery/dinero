@@ -8,7 +8,7 @@ const TransactionsPage = (props) => {
     <main>
       <h2>{props.account.name}</h2>
 
-      <Link href={`/users/${props.userId}/accounts/${props.accountId}/transactions/add`}>Add Transaction</Link>
+      <Link className="button button--primary" href={`/users/${props.userId}/accounts/${props.accountId}/transactions/add`}>Add Transaction</Link>
 
       <TransactionList userId={props.userId} accountId={props.accountId} account={props.account} transactions={props.transactions} payees={props.payees} tags={props.tags} />
     </main>
