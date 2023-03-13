@@ -40,7 +40,7 @@ const EditTransactionForm = ({ userId, accountId, transactionId, transaction, pa
       <Formik
         initialValues={{
           expense: Math.sign(transaction.amount) === -1 ? true : false,
-          amount: Math.abs(transaction.amount),
+          amount: Math.abs(transaction.amount).toFixed(2),
           payee: payee.name,
           date: transaction.date,
           cleared: transaction.cleared,

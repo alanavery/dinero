@@ -32,7 +32,9 @@ const AddUserForm = () => {
         <Form>
           <TextInput label="First Name" id="first-name" name="firstName" required />
 
-          <button type="submit">Add</button>
+          <button type="submit">
+            Add
+          </button>
         </Form>
       </Formik>
 

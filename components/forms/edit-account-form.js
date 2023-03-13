@@ -35,8 +35,8 @@ const EditAccountForm = ({ userId, accountId, account }) => {
       <Formik
         initialValues={{
           name: account.name,
-          startingBalance: account.startingBalance,
-          negativeBalance: account.negativeBalance,
+          startingBalance: Math.abs(account.startingBalance),
+          negativeBalance: Math.sign(account.startingBalance) === -1 ? true : false,
           creditAccount: account.creditAccount,
           creditLimit: account.creditLimit,
         }}

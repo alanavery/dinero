@@ -7,7 +7,7 @@ const CheckboxInput = ({ children, ...props }) => {
   });
 
   return (
-    <div className="form__control">
+    <div className="form__control checkbox">
       <label>
         {children}
         <input type="checkbox" {...field} {...props} />

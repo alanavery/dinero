@@ -4,7 +4,7 @@
 
 $mobile: 425px;
 $spacing-lg: clamp(0px, 5vw, ($mobile * 0.05));
-$spacing-md: clamp(0px, 5vw, ($mobile * 0.02));
+$spacing-md: clamp(0px, 5vw, ($mobile * 0.025));
 $spacing-sm: clamp(0px, 5vw, ($mobile * 0.01));
 
 $primary: #777;
@@ -30,10 +30,6 @@ h1 {
 
 h2 {
   font-size: 1.5rem;
-
-  &:not(:last-child) {
-    margin-bottom: 0.5em;
-  }
 }
 
 ul {
@@ -50,20 +46,46 @@ a {
 }
 
 form {
+  display: grid;
+  grid-template-columns: 100%;
+  row-gap: $spacing-md;
+
   .form__control {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: $spacing-md;
+    align-items: center;
+
     input {
-      font-size: inherit;
+      padding: 0.5em;
       font-family: inherit;
+      font-size: inherit;
     }
+
+    &.checkbox {
+      > label {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        column-gap: $spacing-md;
+      }
+    }
+  }
+
+  button {
+    justify-self: flex-start;
   }
 }
 
+button,
 .button {
+  justify-self: center;
   padding: 0.5em 1em;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: center;
   background-color: $tertiary;
   border: 1px solid $primary;
   border-radius: 10px;
-  text-align: center;
 
   &:hover {
     color: inherit;
@@ -107,13 +129,13 @@ body {
         align-self: flex-start;
 
         section {
+          display: grid;
+          grid-template-columns: 100%;
+          row-gap: $spacing-lg;
+
           &.users,
           &.accounts,
           &.transactions {
-            display: grid;
-            grid-template-columns: 100%;
-            row-gap: $spacing-lg;
-
             > ul {
               border-top: 1px solid $primary;
               border-bottom: 1px solid $primary;
@@ -121,9 +143,9 @@ body {
               > li {
                 display: grid;
                 grid-template-columns: 1fr auto;
+                column-gap: $spacing-md;
                 align-items: center;
                 padding: $spacing-md 0;
-                column-gap: $spacing-md;
 
                 &:not(:last-child) {
                   border-bottom: 1px solid $primary;
@@ -140,6 +162,10 @@ body {
 
                   > a {
                     font-weight: 700;
+                  }
+
+                  > form {
+                    display: block;
                   }
                 }
 
@@ -161,6 +187,12 @@ body {
                 grid-template-columns: 1fr auto;
               }
             }
+          }
+
+          .delete__buttons {
+            display: grid;
+            grid-template-columns: 100%;
+            row-gap: $spacing-md;
           }
         }
       }

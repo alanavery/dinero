@@ -14,6 +14,7 @@ const AccountList = ({ userId, user, accounts, transactions }) => {
             <li key={account._id}>
               <div className="list__item__text">
                 <Link href={`/users/${userId}/accounts/${account._id}/transactions`}>{account.name}</Link>
+
                 <div>{`$${calculateBalance(account.startingBalance, accountTransactions, false)}`}</div>
               </div>
 
@@ -21,6 +22,7 @@ const AccountList = ({ userId, user, accounts, transactions }) => {
                 <Link className="button" href={`/users/${userId}/accounts/${account._id}/edit`}>
                   Edit
                 </Link>
+                
                 <Link className="button" href={`/users/${userId}/accounts/${account._id}/delete`}>
                   Delete
                 </Link>
