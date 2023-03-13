@@ -15,7 +15,7 @@ const AddAccountForm = ({ userId }) => {
       name: values.name,
       startingBalance: Number(values.negativeBalance ? values.startingBalance * -1 : values.startingBalance),
       creditAccount: values.creditAccount,
-      creditLimit: Number(values.creditLimit),
+      creditLimit: values.creditAccount ? Number(values.creditLimit) : null,
       userId,
     };
 

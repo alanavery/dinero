@@ -15,7 +15,7 @@ const EditAccountForm = ({ userId, accountId, account }) => {
       name: values.name,
       startingBalance: Number(values.negativeBalance ? values.startingBalance * -1 : values.startingBalance),
       creditAccount: values.creditAccount,
-      creditLimit: Number(values.creditLimit),
+      creditLimit: values.creditAccount ? Number(values.creditLimit) : null,
       accountId,
     };
 
@@ -38,7 +38,7 @@ const EditAccountForm = ({ userId, accountId, account }) => {
           startingBalance: Math.abs(account.startingBalance),
           negativeBalance: Math.sign(account.startingBalance) === -1 ? true : false,
           creditAccount: account.creditAccount,
-          creditLimit: account.creditLimit,
+          creditLimit: account.creditAccount ? account.creditLimit : '',
         }}
         onSubmit={handleSubmit}
       >
