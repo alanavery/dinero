@@ -34,9 +34,9 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
                   <li key={transaction._id}>
                     <div className="list__item__text">
                       <div>{transaction.date}</div>
-                      <div>{payee && payee.name}</div>
+                      <div className={transaction.split ? 'split' : false}>{payee && payee.name}</div>
                       <div>{`$${transaction.amount.toFixed(2)}`}</div>
-                      <div>{tag && tag.name}</div>
+                      {transaction.tag && <div>{tag && tag.name}</div>}
                     </div>
 
                     <div className="list__item__buttons">
