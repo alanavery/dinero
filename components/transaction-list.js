@@ -4,6 +4,9 @@ import { calculateBalance } from '@/helpers/balance-utils';
 
 const TransactionList = ({ userId, accountId, account, transactions, payees, tags }) => {
   const accountTransactions = transactions.filter((transaction) => transaction.accountId === accountId);
+  const sortedAccountTransactions = accountTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  console.log(sortedAccountTransactions);
 
   return (
     <section className="transactions">
@@ -22,7 +25,7 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
           </div>
 
           <ul>
-            {accountTransactions.map((transaction) => {
+            {sortedAccountTransactions.map((transaction) => {
               const payee = payees.find((payee) => payee._id === transaction.payeeId);
               const tag = tags.find((tag) => tag._id === transaction.tagId);
 
