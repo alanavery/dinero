@@ -2,13 +2,24 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
-$mobile: 425px;
-$spacing-lg: clamp(0px, 5vw, ($mobile * 0.05));
-$spacing-md: clamp(0px, 5vw, ($mobile * 0.025));
-$spacing-sm: clamp(0px, 5vw, ($mobile * 0.01));
+// Mixins ————————————————————
+@mixin rows($row-gap) {
+  display: flex;
+  flex-direction: column;
+  row-gap: $row-gap;
+}
 
-$primary: #777;
-$secondary: #ddd;
+// Variables ————————————————————
+$mobile: 425px;
+// $spacing-lg: clamp(0px, 5vw, ($mobile * 0.05));
+// $spacing-md: clamp(0px, 5vw, ($mobile * 0.025));
+// $spacing-sm: clamp(0px, 5vw, ($mobile * 0.01));
+$spacing-lg: 15px;
+$spacing-md: 10px;
+$spacing-sm: 5px;
+
+$gray-light: #eee;
+$gray-dark: #888;
 $tertiary: #eee;
 $light: #fff;
 $dark: #000;
@@ -41,7 +52,7 @@ a {
   text-decoration: none;
 
   &:hover {
-    color: $primary;
+    color: $gray-light;
   }
 }
 
@@ -80,19 +91,19 @@ button,
   font-size: inherit;
   text-align: center;
   background-color: $tertiary;
-  border: 1px solid $primary;
+  border: 1px solid $gray-light;
   border-radius: 10px;
 
   &:hover {
     color: inherit;
-    background-color: $secondary;
+    background-color: $gray-dark;
   }
 }
 
 body {
   color: $dark;
   font-family: 'Montserrat', sans-serif;
-  background-color: $primary;
+  background-color: $gray-light;
 
   #__next,
   .app {
@@ -114,21 +125,19 @@ body {
     .app {
       grid-template-rows: auto 1fr;
       width: clamp(0px, 100%, $mobile);
-      background-color: $light;
+      // background-color: $light;
       border-radius: 10px;
 
       main {
         align-self: flex-start;
 
-        .nav--secondary {
+        .nav--gray-dark {
           display: flex;
           justify-content: space-between;
         }
 
         section {
-          display: grid;
-          grid-template-columns: 100%;
-          row-gap: $spacing-lg;
+          @include rows($spacing-lg);
 
           &.users,
           &.accounts,
@@ -146,8 +155,8 @@ body {
             }
 
             > ul {
-              border-top: 1px solid $primary;
-              border-bottom: 1px solid $primary;
+              border-top: 1px solid $gray-light;
+              border-bottom: 1px solid $gray-light;
 
               > li {
                 display: grid;
@@ -157,7 +166,7 @@ body {
                 padding: $spacing-md 0;
 
                 &:not(:last-child) {
-                  border-bottom: 1px solid $primary;
+                  border-bottom: 1px solid $gray-light;
                 }
 
                 .list__item__text,
@@ -198,4 +207,47 @@ body {
       }
     }
   }
+}
+
+// Components ————————————————————
+.card {
+  padding: 10px;
+  background-color: $light;
+  border-radius: 5px;
+
+  > div {
+    @include rows($spacing-sm);
+  }
+
+  .card__heading {
+    color: $gray-dark;
+    font-size: 10px;
+  }
+
+  .card__body--lg {
+    font-size: 22px;
+  }
+
+  &.card--lg {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    text-align: center;
+  }
+
+  &.card--sm {
+    @include rows($spacing-md);
+
+    > li {
+      display: grid;
+      grid-template-columns: 1fr auto;
+
+      > div {
+        @include rows($spacing-sm);
+      }
+    }
+  }
+}
+
+.group {
+  @include rows($spacing-sm);
 }
