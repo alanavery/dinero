@@ -11,6 +11,10 @@ const EditTransactionPage = (props) => {
       </Link>
 
       <EditTransactionForm userId={props.userId} accountId={props.accountId} transactionId={props.transactionId} transaction={props.transaction} payee={props.payee} tag={props.tag} />
+
+      <Link className="button" href={`/users/${props.userId}/accounts/${props.accountId}/transactions/${props.transactionId}/delete`}>
+        Delete
+      </Link>
     </main>
   );
 };
