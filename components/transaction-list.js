@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import dayjs from 'dayjs';
+import IconBudget from './svg/icon-budget';
+import IconSplit from './svg/icon-split';
 import { calculateBalance } from '@/helpers/balance-utils';
 
 const TransactionList = ({ userId, accountId, account, transactions, payees, tags }) => {
@@ -42,15 +44,15 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
     <section className="transactions">
       {accountTransactions.length >= 1 && (
         <>
-          <div className="card card--lg">
-            <div>
-              <div className="card__body--lg">{`$${calculateBalance(account.startingBalance, accountTransactions)}`}</div>
-              <div className="card__heading">Account Balance</div>
+          <div className="summary card">
+            <div className="summary__balance">
+              <div className="summary__balance__amount">{`$${calculateBalance(account.startingBalance, accountTransactions)}`}</div>
+              <div className="summary__balance__label">Account Balance</div>
             </div>
 
-            <div>
-              <div className="card__body--lg">{`$${calculateBalance(account.startingBalance, accountTransactions, 'cleared')}`}</div>
-              <div className="card__heading">Cleared Balance</div>
+            <div className="summary__balance">
+              <div className="summary__balance__amount">{`$${calculateBalance(account.startingBalance, accountTransactions, 'cleared')}`}</div>
+              <div className="summary__balance__label">Cleared Balance</div>
             </div>
           </div>
 
@@ -67,9 +69,13 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
 
                       if (showCleared || (!showCleared && !transaction.cleared)) {
                         return (
-                          <li key={transaction._id}>
-                            <Link className="card card--sm" href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/edit`}>
-                              <div className={transaction.split ? 'split' : undefined}>{payee && payee.name}</div>
+                          <li className="transaction" key={transaction._id}>
+                            <Link className="card" href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/edit`}>
+                              <div className="transaction__payee">
+                                {transaction.budget && <IconBudget />}
+                                {transaction.split && <IconSplit />}
+                                <div>{payee.name}</div>
+                              </div>
                               <div className={Math.sign(transaction.amount) === -1 ? 'negative' : 'positive'}>{transaction.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
                             </Link>
                           </li>
