@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import dayjs from 'dayjs';
 import { calculateBalance } from '@/helpers/balance-utils';
 
 const TransactionList = ({ userId, accountId, account, transactions, payees, tags }) => {
@@ -7,7 +8,7 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
 
   const accountTransactions = transactions.filter((transaction) => transaction.accountId === accountId);
   const sortedTransactions = accountTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
-  const transactionGroups = [];
+  const groupedTransactions = [];
   let currentDate = '';
 
   sortedTransactions.forEach((transaction) => {
@@ -16,16 +17,26 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
         date: transaction.date,
         transactions: [transaction],
       };
-      transactionGroups.push(group);
+      groupedTransactions.push(group);
       currentDate = transaction.date;
     } else {
-      const groupIndex = transactionGroups.findIndex((group) => group.date === transaction.date);
-      transactionGroups[groupIndex].transactions.push(transaction);
+      const groupIndex = groupedTransactions.findIndex((group) => group.date === transaction.date);
+      groupedTransactions[groupIndex].transactions.push(transaction);
     }
   });
 
-  console.log(sortedTransactions);
-  console.log(transactionGroups);
+  const transactionAmount = (amount) => {
+    const sign = Math.sign(amount);
+
+    if (sign === -1) {
+      // return <div className="negative">-${Math.abs(amount).toFixed(2)}</div>;
+      return <div className="negative">{amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>;
+    } else if (sign === 1) {
+      return <div className="positive">${amount.toFixed(2)}</div>;
+    } else {
+      return <div>$0</div>;
+    }
+  };
 
   return (
     <section className="transactions">
@@ -43,32 +54,33 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
             </div>
           </div>
 
-          {transactionGroups.map((group) => {
-            return (
-              <div className="group" key={group.date}>
-                <div className="group__date">{group.date}</div>
+          <ul>
+            {groupedTransactions.map((group) => {
+              return (
+                <li key={group.date}>
+                  <div className="transactions__date">{dayjs(group.date).format('MMMM D')}</div>
 
-                <ul className="card card--sm">
-                  {group.transactions.map((transaction) => {
-                    const payee = payees.find((payee) => payee._id === transaction.payeeId);
-                    const tag = tags.find((tag) => tag._id === transaction.tagId);
+                  <ul>
+                    {group.transactions.map((transaction) => {
+                      const payee = payees.find((payee) => payee._id === transaction.payeeId);
+                      const tag = tags.find((tag) => tag._id === transaction.tagId);
 
-                    if (showCleared || (!showCleared && !transaction.cleared)) {
-                      return (
-                        <li key={transaction._id}>
-                          <Link href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/edit`}>
-                            <div className={transaction.split ? 'split' : false}>{payee && payee.name}</div>
-                            {transaction.tag && <div>{tag && tag.name}</div>}
-                            <div>{`$${transaction.amount.toFixed(2)}`}</div>
-                          </Link>
-                        </li>
-                      );
-                    }
-                  })}
-                </ul>
-              </div>
-            );
-          })}
+                      if (showCleared || (!showCleared && !transaction.cleared)) {
+                        return (
+                          <li key={transaction._id}>
+                            <Link className="card card--sm" href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/edit`}>
+                              <div className={transaction.split ? 'split' : undefined}>{payee && payee.name}</div>
+                              <div className={Math.sign(transaction.amount) === -1 ? 'negative' : 'positive'}>{transaction.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                            </Link>
+                          </li>
+                        );
+                      }
+                    })}
+                  </ul>
+                </li>
+              );
+            })}
+          </ul>
 
           <button onClick={() => setShowCleared(showCleared ? false : true)}>{showCleared ? 'Hide Cleared' : 'Show Cleared'}</button>
         </>

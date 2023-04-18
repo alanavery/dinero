@@ -11,12 +11,10 @@
 
 // Variables ————————————————————
 $mobile: 425px;
-// $spacing-lg: clamp(0px, 5vw, ($mobile * 0.05));
-// $spacing-md: clamp(0px, 5vw, ($mobile * 0.025));
-// $spacing-sm: clamp(0px, 5vw, ($mobile * 0.01));
 $spacing-lg: 15px;
 $spacing-md: 10px;
 $spacing-sm: 5px;
+$spacing-xs: 2px;
 
 $gray-light: #eee;
 $gray-dark: #888;
@@ -50,6 +48,14 @@ ul {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.negative {
+  color: red;
+}
+
+.positive {
+  color: green;
 }
 
 form {
@@ -131,10 +137,8 @@ body {
           @include rows($spacing-lg);
 
           &.users,
-          &.accounts,
-          &.transactions {
-            .accounts__summary,
-            .transactions__summary {
+          &.accounts {
+            .accounts__summary {
               display: grid;
               grid-template-columns: 100%;
               row-gap: $spacing-sm;
@@ -200,11 +204,46 @@ body {
   }
 }
 
+.transactions {
+  > ul {
+    @include rows($spacing-lg);
+
+    > li {
+      @include rows($spacing-sm);
+
+      .transactions__date {
+        padding: 0 20px;
+      }
+
+      > ul {
+        @include rows($spacing-xs);
+
+        > li {
+          &:first-child {
+            .card {
+              border-top-left-radius: 5px;
+              border-top-right-radius: 5px;
+            }
+          }
+
+          &:last-child {
+            .card {
+              border-bottom-right-radius: 5px;
+              border-bottom-left-radius: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 // Components ————————————————————
 .card {
-  padding: 10px;
+  display: grid;
+  column-gap: 20px;
+  padding: 10px 20px;
   background-color: $light;
-  border-radius: 5px;
 
   > div {
     @include rows($spacing-sm);
@@ -220,25 +259,12 @@ body {
   }
 
   &.card--lg {
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
     text-align: center;
+    border-radius: 5px;
   }
 
   &.card--sm {
-    @include rows($spacing-md);
-
-    > li {
-      display: grid;
-      grid-template-columns: 1fr auto;
-
-      > div {
-        @include rows($spacing-sm);
-      }
-    }
+    grid-template-columns: 1fr auto;
   }
-}
-
-.group {
-  @include rows($spacing-sm);
 }
