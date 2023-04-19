@@ -73,11 +73,6 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
                           <li className="transaction" key={transaction._id}>
                             <Link className="card" href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/edit`}>
                               <div className="transaction__payee">
-                                {/* {transaction.budget && (
-                                  <div className="icon">
-                                    <Image src="/images/icons/icon-budget.png" alt="Budget icon" fill />
-                                  </div>
-                                )} */}
                                 {transaction.budget && <IconBudget />}
                                 {transaction.split && <IconSplit />}
                                 <div>{payee.name}</div>
