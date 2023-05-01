@@ -1,0 +1,67 @@
+.transaction {
+  display: grid;
+  grid-template-columns: 1fr 40px;
+
+  &__summary {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: repeat(2, 1fr);
+    column-gap: $spacing-xl;
+    row-gap: $spacing-xs;
+    padding: 10px 20px;
+    background-color: $light;
+
+    &__payee {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    &__details {
+      display: flex;
+      column-gap: $spacing-sm;
+      align-items: center;
+
+      &__tag {
+        color: $gray-dark;
+        font-style: italic;
+      }
+    }
+  }
+
+  &__button {
+    background-color: $gray-dark;
+    border: none;
+  }
+
+  &.cleared {
+    .transaction {
+      &__button {
+        background-color: green;
+      }
+    }
+  }
+
+  &:first-child {
+    .transaction {
+      &__summary {
+        border-top-left-radius: 5px;
+      }
+
+      &__button {
+        border-top-right-radius: 5px;
+      }
+    }
+  }
+
+  &:last-child {
+    .transaction {
+      &__summary {
+        border-bottom-left-radius: 5px;
+      }
+
+      &__button {
+        border-bottom-right-radius: 5px;
+      }
+    }
+  }
+}

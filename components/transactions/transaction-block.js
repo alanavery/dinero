@@ -29,19 +29,19 @@ const TransactionBlock = ({ transaction, payee, tag, setTransactions, pending, s
 
   return (
     <li className={`transaction${transaction.cleared ? ' cleared' : ''}`}>
-      <Link className="block" href={`/users/${transaction.userId}/accounts/${transaction.accountId}/transactions/${transaction._id}/edit`}>
-        <div className="transaction__payee">
+      <Link className="transaction__summary" href={`/users/${transaction.userId}/accounts/${transaction.accountId}/transactions/${transaction._id}/edit`}>
+        <div className="transaction__summary__payee">{payee.name}</div>
+
+        <div className={`transaction__summary__amount${Math.sign(transaction.amount) === -1 ? ' negative' : ' positive'}`}>{transaction.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+
+        <div className="transaction__summary__details">
           {transaction.budget && <IconBudget />}
-
           {transaction.split && <IconSplit />}
-
-          <div>{payee.name}</div>
+          {tag && <div className="transaction__summary__details__tag">{tag.name}</div>}
         </div>
-
-        <div className={Math.sign(transaction.amount) === -1 ? 'negative' : 'positive'}>{transaction.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
       </Link>
 
-      <button onClick={handleClick} disabled={pending} />
+      <button className="transaction__button" onClick={handleClick} disabled={pending} />
     </li>
   );
 };

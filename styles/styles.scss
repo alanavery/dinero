@@ -108,14 +108,10 @@ body {
   font-family: 'Montserrat', sans-serif;
   background-color: $gray-light;
 
-  #__next,
-  .app {
-    padding: $spacing-lg;
-  }
-
   #__next {
     display: flex;
     justify-content: center;
+    padding: $spacing-xl;
     min-height: 100vh;
 
     .app,
@@ -128,7 +124,6 @@ body {
     .app {
       grid-template-rows: auto 1fr;
       width: clamp(0px, 100%, $mobile);
-      // background-color: $light;
       border-radius: 10px;
 
       main {
@@ -223,48 +218,6 @@ body {
 
       > ul {
         @include rows($spacing-xs);
-
-        .transaction {
-          display: grid;
-          grid-template-columns: 1fr 20px;
-
-          .block {
-            display: flex;
-            justify-content: space-between;
-
-            .transaction__payee {
-              display: flex;
-              flex: 1;
-              column-gap: $spacing-sm;
-              align-items: center;
-            }
-          }
-
-          button {
-            border: none;
-            background-color: $gray-dark;
-          }
-
-          &.cleared {
-            button {
-              background-color: green;
-            }
-          }
-
-          // &:first-child {
-          //   .block {
-          //     border-top-left-radius: 5px;
-          //     border-top-right-radius: 5px;
-          //   }
-          // }
-
-          // &:last-child {
-          //   .block {
-          //     border-bottom-right-radius: 5px;
-          //     border-bottom-left-radius: 5px;
-          //   }
-          // }
-        }
       }
     }
   }
@@ -296,3 +249,5 @@ body {
     }
   }
 }
+
+@import './transaction.scss';

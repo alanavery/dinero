@@ -54,7 +54,7 @@ const TransactionList = ({ userId, accountId, account, transactions, setTransact
                       const tag = tags.find((tag) => tag._id === transaction.tagId);
 
                       if (showCleared || (!showCleared && !transaction.cleared)) {
-                        return <TransactionBlock userId={userId} accountId={accountId} transaction={transaction} payee={payee} setTransactions={setTransactions} pending={pending} setPending={setPending} key={transaction._id} />;
+                        return <TransactionBlock transaction={transaction} payee={payee} tag={tag} setTransactions={setTransactions} pending={pending} setPending={setPending} key={transaction._id} />;
                       }
                     })}
                   </ul>
