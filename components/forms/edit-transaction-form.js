@@ -12,7 +12,7 @@ const EditTransactionForm = ({ userId, accountId, transactionId, transaction, pa
   const router = useRouter();
 
   const handleSubmit = async (values) => {
-    const formData = {
+    const reqBody = {
       amount: Number(values.expense ? values.amount * -1 : values.amount),
       payee: values.payee,
       date: values.date,
@@ -21,11 +21,11 @@ const EditTransactionForm = ({ userId, accountId, transactionId, transaction, pa
       split: values.split,
       tag: values.tag,
       userId,
-      transactionId
+      transactionId,
     };
 
     await axios
-      .put('/api/transactions', formData)
+      .put('/api/transactions', reqBody)
       .then(() => router.push(`/users/${userId}/accounts/${accountId}/transactions`))
       .catch((error) => {
         console.log(error);

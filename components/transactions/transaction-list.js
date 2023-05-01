@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import dayjs from 'dayjs';
-import IconBudget from './svg/icon-budget';
-import IconSplit from './svg/icon-split';
+import TransactionBlock from './transaction-block';
 import { calculateBalance } from '@/helpers/balance-utils';
 
-const TransactionList = ({ userId, accountId, account, transactions, payees, tags }) => {
+const TransactionList = ({ userId, accountId, account, transactions, setTransactions, payees, tags }) => {
   const [showCleared, setShowCleared] = useState(false);
+  const [pending, setPending] = useState(false);
 
   const accountTransactions = transactions.filter((transaction) => transaction.accountId === accountId);
   const sortedTransactions = accountTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -28,24 +26,11 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
     }
   });
 
-  const transactionAmount = (amount) => {
-    const sign = Math.sign(amount);
-
-    if (sign === -1) {
-      // return <div className="negative">-${Math.abs(amount).toFixed(2)}</div>;
-      return <div className="negative">{amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>;
-    } else if (sign === 1) {
-      return <div className="positive">${amount.toFixed(2)}</div>;
-    } else {
-      return <div>$0</div>;
-    }
-  };
-
   return (
     <section className="transactions">
       {accountTransactions.length >= 1 && (
         <>
-          <div className="summary card">
+          <div className="summary block">
             <div className="summary__balance">
               <div className="summary__balance__amount">{`$${calculateBalance(account.startingBalance, accountTransactions)}`}</div>
               <div className="summary__balance__label">Account Balance</div>
@@ -69,18 +54,7 @@ const TransactionList = ({ userId, accountId, account, transactions, payees, tag
                       const tag = tags.find((tag) => tag._id === transaction.tagId);
 
                       if (showCleared || (!showCleared && !transaction.cleared)) {
-                        return (
-                          <li className="transaction" key={transaction._id}>
-                            <Link className="card" href={`/users/${userId}/accounts/${accountId}/transactions/${transaction._id}/edit`}>
-                              <div className="transaction__payee">
-                                {transaction.budget && <IconBudget />}
-                                {transaction.split && <IconSplit />}
-                                <div>{payee.name}</div>
-                              </div>
-                              <div className={Math.sign(transaction.amount) === -1 ? 'negative' : 'positive'}>{transaction.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
-                            </Link>
-                          </li>
-                        );
+                        return <TransactionBlock userId={userId} accountId={accountId} transaction={transaction} payee={payee} setTransactions={setTransactions} pending={pending} setPending={setPending} key={transaction._id} />;
                       }
                     })}
                   </ul>

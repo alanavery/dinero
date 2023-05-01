@@ -1,4 +1,5 @@
 import { MongoClient, ObjectId } from 'mongodb';
+import { getMultipleDocuments } from '@/helpers/db-utils';
 
 const handler = async (req, res) => {
   const client = new MongoClient(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_URL}?retryWrites=true&w=majority`);
@@ -113,14 +114,30 @@ const handler = async (req, res) => {
       await client.close();
     }
   } else if (req.method === 'PUT') {
-    try {
-      await editTransaction();
-      res.status(200).json();
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: 'Unable to edit transaction' });
-    } finally {
-      await client.close();
+    if (req.body.editStatus) {
+      try {
+        const database = client.db('dinero');
+
+        await database.collection('transactions').updateOne({ _id: ObjectId(req.body.transactionId) }, { $set: { cleared: req.body.cleared } });
+        const transactions = await getMultipleDocuments(database, 'transactions', { userId: req.body.userId });
+
+        res.status(200).json({ transactions });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Unable to edit transaction' });
+      } finally {
+        await client.close();
+      }
+    } else {
+      try {
+        await editTransaction();
+        res.status(200).json();
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Unable to edit transaction' });
+      } finally {
+        await client.close();
+      }
     }
   } else if (req.method === 'DELETE') {
     try {

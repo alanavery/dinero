@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import Link from 'next/link';
 import { MongoClient, ObjectId } from 'mongodb';
 import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
-import TransactionList from '@/components/transaction-list';
+import TransactionList from '@/components/transactions/transaction-list';
 
 const TransactionsPage = (props) => {
+  const [transactions, setTransactions] = useState(props.transactions);
+
   return (
     <main>
       <h2>{props.account.name}</h2>
@@ -18,7 +21,7 @@ const TransactionsPage = (props) => {
         </Link>
       </div>
 
-      <TransactionList userId={props.userId} accountId={props.accountId} account={props.account} transactions={props.transactions} payees={props.payees} tags={props.tags} />
+      <TransactionList userId={props.userId} accountId={props.accountId} account={props.account} transactions={transactions} setTransactions={setTransactions} payees={props.payees} tags={props.tags} />
     </main>
   );
 };

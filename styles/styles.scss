@@ -86,7 +86,6 @@ form {
   }
 }
 
-button,
 .button {
   justify-self: center;
   padding: 0.5em 1em;
@@ -226,7 +225,10 @@ body {
         @include rows($spacing-xs);
 
         .transaction {
-          .card {
+          display: grid;
+          grid-template-columns: 1fr 20px;
+
+          .block {
             display: flex;
             justify-content: space-between;
 
@@ -238,19 +240,30 @@ body {
             }
           }
 
-          &:first-child {
-            .card {
-              border-top-left-radius: 5px;
-              border-top-right-radius: 5px;
+          button {
+            border: none;
+            background-color: $gray-dark;
+          }
+
+          &.cleared {
+            button {
+              background-color: green;
             }
           }
 
-          &:last-child {
-            .card {
-              border-bottom-right-radius: 5px;
-              border-bottom-left-radius: 5px;
-            }
-          }
+          // &:first-child {
+          //   .block {
+          //     border-top-left-radius: 5px;
+          //     border-top-right-radius: 5px;
+          //   }
+          // }
+
+          // &:last-child {
+          //   .block {
+          //     border-bottom-right-radius: 5px;
+          //     border-bottom-left-radius: 5px;
+          //   }
+          // }
         }
       }
     }
@@ -258,7 +271,7 @@ body {
 }
 
 // Components ————————————————————
-.card {
+.block {
   column-gap: $spacing-xl;
   padding: 10px 20px;
   background-color: $light;
