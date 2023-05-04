@@ -1,0 +1,19 @@
+.main {
+  padding-bottom: $add-button-height;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: $spacing-lg;
+  align-items: flex-start;
+}
+
+.button {
+  justify-self: flex-start;
+  color: $blue;
+}
+
+.heading {
+  grid-column: 2 / -2;
+}

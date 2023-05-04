@@ -23,7 +23,7 @@ const TransactionList = () => {
         </div>
       </div>
 
-      <button className="button" onClick={() => context.setShowCleared(!context.showCleared)}>
+      <button className={`button ${styles.button}`} onClick={() => context.setShowCleared(!context.showCleared)}>
         {context.showCleared ? 'Hide Cleared' : 'Show Cleared'}
       </button>
 

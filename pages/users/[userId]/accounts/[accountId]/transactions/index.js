@@ -3,34 +3,36 @@ import { MongoClient, ObjectId } from 'mongodb';
 import { TransactionContextProvider } from '@/store/transaction-context';
 import TransactionList from '@/components/transactions/transaction-list';
 import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
+import AddButton from '@/components/ui/add-button';
+import styles from '@/styles/transactions-page.module.scss';
 
 const TransactionsPage = (props) => {
   return (
     <TransactionContextProvider props={props}>
-      <main>
-        <h2>{props.account.name}</h2>
-
-        <div className="nav--secondary">
-          <Link className="button" href={`/users/${props.userId}/accounts`}>
+      <main className={styles.main}>
+        <div className={styles.header}>
+          <Link className={styles.button} href={`/users/${props.userId}/accounts`}>
             Back
           </Link>
 
-          <Link className="button" href={`/users/${props.userId}/accounts/${props.accountId}/transactions/add`}>
-            Add Transaction
-          </Link>
+          <h2 className={styles.heading}>{props.account.name}</h2>
         </div>
 
         {props.transactions.length >= 1 && <TransactionList />}
+
+        <AddButton resolvedUrl={props.resolvedUrl} />
       </main>
     </TransactionContextProvider>
   );
 };
 
 export const getServerSideProps = async (context) => {
+  const resolvedUrl = context.resolvedUrl;
   const userId = context.params.userId;
   const accountId = context.params.accountId;
 
   const props = {
+    resolvedUrl,
     userId,
     accountId,
     account: {},

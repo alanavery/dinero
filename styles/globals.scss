@@ -19,7 +19,7 @@ h1 {
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 ul {
@@ -67,13 +67,14 @@ form {
 }
 
 .button {
-  align-self: center;
-  padding: 0.5em 1em;
+  display: inline-block;
+  padding: 0.75em 1em;
   color: $white;
   font-family: inherit;
   font-size: inherit;
+  line-height: 1;
   text-align: center;
-  background-color: $blue;
+  background-color: $gray-dark;
   border: none;
   border-radius: 10px;
 }
@@ -88,100 +89,88 @@ body {
   color: $black;
   font-family: 'Montserrat', sans-serif;
   background-color: $gray-light;
+}
 
-  #__next {
+.app {
+  @include rows($spacing-lg);
+  padding: $spacing-xl;
+  margin: 0 auto;
+  width: 100%;
+  max-width: $mobile;
+}
+
+main {
+  @include rows($spacing-lg);
+
+  .nav--gray-dark {
     display: flex;
-    justify-content: center;
-    padding: $spacing-xl;
-    min-height: 100vh;
+    justify-content: space-between;
+  }
 
-    .app,
-    main {
-      display: grid;
-      grid-template-columns: 100%;
-      row-gap: $spacing-lg;
-    }
+  section {
+    @include rows($spacing-lg);
 
-    .app {
-      grid-template-rows: auto 1fr;
-      width: clamp(0px, 100%, $mobile);
-      border-radius: 10px;
+    &.users,
+    &.accounts {
+      .accounts__summary {
+        display: grid;
+        grid-template-columns: 100%;
+        row-gap: $spacing-sm;
 
-      main {
-        align-self: flex-start;
-
-        .nav--gray-dark {
-          display: flex;
-          justify-content: space-between;
+        > div {
+          display: grid;
+          grid-template-columns: 1fr auto;
         }
+      }
 
-        section {
-          @include rows($spacing-lg);
+      > ul {
+        border-top: 1px solid $gray-light;
+        border-bottom: 1px solid $gray-light;
 
-          &.users,
-          &.accounts {
-            .accounts__summary {
-              display: grid;
-              grid-template-columns: 100%;
-              row-gap: $spacing-sm;
+        > li {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          column-gap: $spacing-md;
+          align-items: center;
+          padding: $spacing-md 0;
 
-              > div {
-                display: grid;
-                grid-template-columns: 1fr auto;
-              }
+          &:not(:last-child) {
+            border-bottom: 1px solid $gray-light;
+          }
+
+          .list__item__text,
+          .list__item__buttons {
+            display: grid;
+            grid-template-columns: 100%;
+          }
+
+          .list__item__text {
+            row-gap: $spacing-sm;
+
+            > a {
+              font-weight: 700;
             }
 
-            > ul {
-              border-top: 1px solid $gray-light;
-              border-bottom: 1px solid $gray-light;
+            > form {
+              display: block;
+            }
 
-              > li {
-                display: grid;
-                grid-template-columns: 1fr auto;
-                column-gap: $spacing-md;
-                align-items: center;
-                padding: $spacing-md 0;
-
-                &:not(:last-child) {
-                  border-bottom: 1px solid $gray-light;
-                }
-
-                .list__item__text,
-                .list__item__buttons {
-                  display: grid;
-                  grid-template-columns: 100%;
-                }
-
-                .list__item__text {
-                  row-gap: $spacing-sm;
-
-                  > a {
-                    font-weight: 700;
-                  }
-
-                  > form {
-                    display: block;
-                  }
-
-                  .split {
-                    color: blue;
-                  }
-                }
-
-                .list__item__buttons {
-                  row-gap: $spacing-md;
-                }
-              }
+            .split {
+              color: blue;
             }
           }
 
-          .delete__buttons {
-            display: grid;
-            grid-template-columns: 100%;
+          .list__item__buttons {
             row-gap: $spacing-md;
           }
         }
       }
+    }
+
+    .delete__buttons {
+      display: grid;
+      grid-template-columns: 100%;
+      row-gap: $spacing-md;
     }
   }
 }
