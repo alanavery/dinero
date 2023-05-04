@@ -1,12 +1,18 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import TransactionContext from '@/store/transaction-context';
 import IconBudget from '../svg/icon-budget';
 import IconSplit from '../svg/icon-split';
 
-const TransactionBlock = ({ transaction, payee, tag, setTransactions, pending, setPending }) => {
+const TransactionBlock = ({ transaction }) => {
+  const context = useContext(TransactionContext);
+
+  const payee = context.payees.find((payee) => payee._id === transaction.payeeId);
+  const tag = context.tags.find((tag) => tag._id === transaction.tagId);
+
   const handleClick = async () => {
-    setPending(true);
+    context.setPending(true);
 
     const reqBody = {
       editStatus: true,
@@ -18,13 +24,13 @@ const TransactionBlock = ({ transaction, payee, tag, setTransactions, pending, s
     await axios
       .put('/api/transactions', reqBody)
       .then((response) => {
-        setTransactions(response.data.transactions);
+        context.setTransactions(response.data.transactions);
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setPending(false);
+    context.setPending(false);
   };
 
   return (
@@ -41,7 +47,7 @@ const TransactionBlock = ({ transaction, payee, tag, setTransactions, pending, s
         </div>
       </Link>
 
-      <button className="transaction__button" onClick={handleClick} disabled={pending} />
+      <button className="transaction__button" onClick={handleClick} disabled={context.pending} />
     </li>
   );
 };

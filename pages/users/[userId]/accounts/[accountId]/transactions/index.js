@@ -1,28 +1,28 @@
-import { useState } from 'react';
 import Link from 'next/link';
 import { MongoClient, ObjectId } from 'mongodb';
-import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
+import { TransactionContextProvider } from '@/store/transaction-context';
 import TransactionList from '@/components/transactions/transaction-list';
+import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
 
 const TransactionsPage = (props) => {
-  const [transactions, setTransactions] = useState(props.transactions);
-
   return (
-    <main>
-      <h2>{props.account.name}</h2>
+    <TransactionContextProvider props={props}>
+      <main>
+        <h2>{props.account.name}</h2>
 
-      <div className="nav--secondary">
-        <Link className="button" href={`/users/${props.userId}/accounts`}>
-          Back
-        </Link>
+        <div className="nav--secondary">
+          <Link className="button" href={`/users/${props.userId}/accounts`}>
+            Back
+          </Link>
 
-        <Link className="button" href={`/users/${props.userId}/accounts/${props.accountId}/transactions/add`}>
-          Add Transaction
-        </Link>
-      </div>
+          <Link className="button" href={`/users/${props.userId}/accounts/${props.accountId}/transactions/add`}>
+            Add Transaction
+          </Link>
+        </div>
 
-      <TransactionList userId={props.userId} accountId={props.accountId} account={props.account} transactions={transactions} setTransactions={setTransactions} payees={props.payees} tags={props.tags} />
-    </main>
+        {props.transactions.length >= 1 && <TransactionList />}
+      </main>
+    </TransactionContextProvider>
   );
 };
 
@@ -48,6 +48,8 @@ export const getServerSideProps = async (context) => {
   for (const collectionName of collectionNames) {
     if (collectionName === 'accounts') {
       props.account = await getOneDocument(database, 'accounts', { _id: ObjectId(accountId) });
+    } else if (collectionName === 'transactions') {
+      props.transactions = await getMultipleDocuments(database, 'transactions', { accountId });
     } else {
       props[collectionName] = await getMultipleDocuments(database, collectionName, { userId });
     }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { calculateBalance } from '@/helpers/balance-utils';
+import { calculateBalance } from '@/helpers/transaction-utils';
 
 const AccountList = ({ userId, user, accounts, transactions }) => {
   const totalStartingBalance = accounts.reduce((a, b) => a + b.startingBalance, 0);
