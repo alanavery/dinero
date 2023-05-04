@@ -1,51 +1,5 @@
 import { DateTime } from 'luxon';
 
-export const getAccountTransactions = (transactions, accountId) => {
-  return transactions.filter((transaction) => transaction.accountId === accountId);
-};
-
-export const getPendingTransactions = (transactions) => {
-  return transactions.filter((transaction) => !transaction.cleared);
-};
-
-export const groupTransactionsByDate = (transactions) => {
-  const groups = [];
-
-  for (const transaction of transactions) {
-    const matchingGroup = groups.find((group) => group.date === transaction.date);
-
-    if (matchingGroup) {
-      matchingGroup.transactions.push(transaction);
-    } else {
-      groups.push({
-        date: transaction.date,
-        transactions: [transaction],
-      });
-    }
-  }
-
-  return groups.sort((a, b) => new Date(b.date) - new Date(a.date));
-};
-
-export const groupClearedTransactionsByDate = (transactions) => {
-  const groups = [];
-
-  for (const transaction of transactions) {
-    const matchingGroup = groups.find((group) => group.date === transaction.date);
-
-    if (matchingGroup) {
-      matchingGroup.transactions.push(transaction);
-    } else {
-      groups.push({
-        date: transaction.date,
-        transactions: [transaction],
-      });
-    }
-  }
-
-  return groups.sort((a, b) => new Date(b.date) - new Date(a.date));
-};
-
 export const calculateBalance = (startingBalance, transactions, type) => {
   if (type === 'cleared') {
     const clearedTransactions = transactions.filter((transaction) => transaction.cleared);
@@ -75,4 +29,27 @@ export const calculateBalance = (startingBalance, transactions, type) => {
   }
 
   return transactions.reduce((a, b) => a + b.amount, startingBalance).toFixed(2);
+};
+
+export const groupTransactionsByDate = (transactions) => {
+  const groups = [];
+
+  for (const transaction of transactions) {
+    const matchingGroup = groups.find((group) => group.date === transaction.date);
+
+    if (matchingGroup) {
+      matchingGroup.transactions.push(transaction);
+    } else {
+      groups.push({
+        date: transaction.date,
+        transactions: [transaction],
+      });
+    }
+  }
+
+  return groups.sort((a, b) => new Date(b.date) - new Date(a.date));
+};
+
+export const containsPendingTransactions = (group) => {
+  return group.transactions.find((transaction) => !transaction.cleared);
 };

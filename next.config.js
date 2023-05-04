@@ -1,6 +1,6 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: false,
+  sassOptions: {
+    additionalData: `@use 'sass:math'; @import '@/styles/variables.scss'; @import '@/styles/mixins.scss';`,
+  },
 };
-
-module.exports = nextConfig;

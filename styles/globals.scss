@@ -1,27 +1,7 @@
-@use 'sass:math';
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
-// Mixins ————————————————————
-@mixin rows($row-gap) {
-  display: flex;
-  flex-direction: column;
-  row-gap: $row-gap;
-}
-
-// Variables ————————————————————
-$mobile: 425px;
-$spacing-xl: 20px;
-$spacing-lg: 15px;
-$spacing-md: 10px;
-$spacing-sm: 5px;
-$spacing-xs: 2px;
-
-$gray-light: #eee;
-$gray-dark: #888;
-$tertiary: #eee;
-$light: #fff;
-$dark: #000;
+@import './variables.scss';
+@import './mixins.scss';
 
 * {
   padding: 0;
@@ -87,13 +67,14 @@ form {
 }
 
 .button {
-  justify-self: center;
+  align-self: center;
   padding: 0.5em 1em;
+  color: $white;
   font-family: inherit;
   font-size: inherit;
   text-align: center;
-  background-color: $tertiary;
-  border: 1px solid $gray-light;
+  background-color: $blue;
+  border: none;
   border-radius: 10px;
 }
 
@@ -104,7 +85,7 @@ form {
 }
 
 body {
-  color: $dark;
+  color: $black;
   font-family: 'Montserrat', sans-serif;
   background-color: $gray-light;
 
@@ -227,7 +208,7 @@ body {
 .block {
   column-gap: $spacing-xl;
   padding: 10px 20px;
-  background-color: $light;
+  background-color: $white;
 
   &.summary {
     display: grid;

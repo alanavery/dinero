@@ -1,16 +1,13 @@
 import { useContext } from 'react';
 import TransactionContext from '@/store/transaction-context';
 import TransactionGroup from './transaction-group';
-import { calculateBalance, getAccountTransactions, getPendingTransactions, groupTransactionsByDate } from '@/helpers/transaction-utils';
+import { calculateBalance, groupTransactionsByDate, containsPendingTransactions } from '@/helpers/transaction-utils';
+import styles from './transaction-list.module.scss';
 
 const TransactionList = () => {
   const context = useContext(TransactionContext);
 
   const transactionGroups = groupTransactionsByDate(context.transactions);
-
-  const containsPendingTransactions = (group) => {
-    return group.transactions.find((transaction) => !transaction.cleared);
-  };
 
   return (
     <section className="transactions">
@@ -26,6 +23,10 @@ const TransactionList = () => {
         </div>
       </div>
 
+      <button className="button" onClick={() => context.setShowCleared(!context.showCleared)}>
+        {context.showCleared ? 'Hide Cleared' : 'Show Cleared'}
+      </button>
+
       {(context.showCleared || transactionGroups.find((group) => containsPendingTransactions(group))) && (
         <ul>
           {transactionGroups.map((group) => {
@@ -35,8 +36,6 @@ const TransactionList = () => {
           })}
         </ul>
       )}
-
-      <button onClick={() => context.setShowCleared(!context.showCleared)}>{context.showCleared ? 'Hide Cleared' : 'Show Cleared'}</button>
     </section>
   );
 };
