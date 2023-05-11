@@ -46,7 +46,7 @@ const AddTransactionForm = ({ userId, accountId }) => {
           date: formatDate(new Date()),
           cleared: false,
           budget: true,
-          split: false,
+          split: accountId === '640f5722172105133e1197e7' ? true : false,
           tag: '',
         }}
         onSubmit={handleSubmit}

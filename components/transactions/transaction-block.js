@@ -17,7 +17,7 @@ const TransactionBlock = ({ transaction }) => {
     const reqBody = {
       editStatus: true,
       cleared: !transaction.cleared,
-      userId: transaction.userId,
+      accountId: transaction.accountId,
       transactionId: transaction._id,
     };
 

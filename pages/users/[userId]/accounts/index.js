@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { MongoClient, ObjectId } from 'mongodb';
 import { getOneDocument, getMultipleDocuments } from '@/helpers/db-utils';
-import AccountList from '@/components/account-list';
+import AccountList from '@/components/accounts/account-list';
 
 const AccountsPage = (props) => {
   return (

@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { calculateBalance } from '@/helpers/transaction-utils';
+import styles from './account-list.module.scss';
 
 const AccountList = ({ userId, user, accounts, transactions }) => {
   const totalStartingBalance = accounts.reduce((a, b) => a + b.startingBalance, 0);
+
+  const featuredAccounts = ['640f5439172105133e1197e2', '640f5722172105133e1197e7', '640f5ed70522739fc572bf0b', '640f5faa0522739fc572bf0c'];
 
   return (
     <section className="accounts">
@@ -33,7 +36,9 @@ const AccountList = ({ userId, user, accounts, transactions }) => {
           return (
             <li key={account._id}>
               <div className="list__item__text">
-                <Link href={`/users/${userId}/accounts/${account._id}/transactions`}>{account.name}</Link>
+                <Link className={featuredAccounts.includes(account._id) ? styles.featured : undefined} href={`/users/${userId}/accounts/${account._id}/transactions`}>
+                  {account.name}
+                </Link>
 
                 <div>{`$${calculateBalance(account.startingBalance, accountTransactions)}`}</div>
               </div>

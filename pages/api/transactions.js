@@ -119,7 +119,8 @@ const handler = async (req, res) => {
         const database = client.db('dinero');
 
         await database.collection('transactions').updateOne({ _id: ObjectId(req.body.transactionId) }, { $set: { cleared: req.body.cleared } });
-        const transactions = await getMultipleDocuments(database, 'transactions', { userId: req.body.userId });
+
+        const transactions = await getMultipleDocuments(database, 'transactions', { accountId: req.body.accountId });
 
         res.status(200).json({ transactions });
       } catch (error) {
